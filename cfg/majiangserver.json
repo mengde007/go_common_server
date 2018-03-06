@@ -1,0 +1,14 @@
+{   
+    "comment2"   : "麻将的内网ip地址:8891",
+    "Host" : "127.0.0.1:8891",
+    "DebugHost" : "127.0.0.1:8891",
+    "GcTime" : 120,
+    "CpuProfile" : false,
+    
+    "Maincache": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "index": 0,
+        "pool": 100
+    }
+}

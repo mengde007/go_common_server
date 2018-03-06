@@ -1,0 +1,11 @@
+Id,Name,GameType,Value,Rewards,Icon
+int,varchar(255),int,int,varchar(255),varchar(255)
+1,分享%d次朋友圈,0,1,1:5000,task_icon_01.png
+2,分享%d次给好友,0,1,1:2000,task_icon_02.png
+3,玩泸州大贰%d盘,1,2,1:2000,task_icon_03.png
+4,玩泸州鬼麻将%d盘,2,2,1:2000,task_icon_04.png
+5,玩扑克%d盘,3,2,1:2000,task_icon_05.png
+6,赢泸州大贰%d盘,1,5,1:2000,task_icon_03.png
+7,赢泸州大贰%d盘,1,10,1:5000,task_icon_03.png
+8,赢泸州鬼麻将%d盘,2,5,1:2000,task_icon_04.png
+9,赢泸州鬼麻将%d盘,2,10,1:5000,task_icon_04.png

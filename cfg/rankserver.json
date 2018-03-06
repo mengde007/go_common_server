@@ -1,0 +1,13 @@
+{
+  "GeneralRankHost": "127.0.0.1:8898",
+  "DebugHost": "127.0.0.1:5698",
+  "GcTime": 120,
+  "CpuProfile": false,
+  
+  "Maincache": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "index": 0,
+        "pool": 10
+    }
+}

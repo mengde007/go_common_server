@@ -1,0 +1,7 @@
+{
+	"comment1"      : "这里配置的版本相关信息",
+    "VersionNew":999999999,
+    "VersionOld":0,
+    "VersionMid":0,
+    "DownloadUrl":"http://x"
+}

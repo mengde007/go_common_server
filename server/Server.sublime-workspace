@@ -1,0 +1,1057 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"get",
+				"GetVillage	*village ƒ"
+			],
+			[
+				"ge",
+				"GetP	*rpc.Position ƒ"
+			],
+			[
+				"Err",
+				"ErrShutdown	error ν"
+			],
+			[
+				"func",
+				"func (*Client)	func (...) {...} ʂ"
+			],
+			[
+				"fun",
+				"func	Function"
+			],
+			[
+				"rewr",
+				"ReadWriteCloser	interface ¡"
+			],
+			[
+				"f",
+				"func (*Router)	func (...) {...} ʂ"
+			],
+			[
+				"debug",
+				"debugService	struct ʈ"
+			],
+			[
+				"se",
+				"ServeHTTP	 ƒ"
+			],
+			[
+				"lo",
+				"LoginResult_ISONFIRE	 Ɩ"
+			],
+			[
+				"v",
+				"VillageInfo	*rpc.VillageInfo ν"
+			],
+			[
+				"e",
+				"ErrNil	error ν"
+			],
+			[
+				"u",
+				"Uid	*string ν"
+			],
+			[
+				"info",
+				"info2	[]byte ν"
+			],
+			[
+				"pu",
+				"PutUint32	 ƒ"
+			],
+			[
+				"pr",
+				"Println	n int, err error ƒ"
+			],
+			[
+				"sc",
+				"Sscanf	n int, err error ƒ"
+			],
+			[
+				"l",
+				"FreeLockResult	struct ʈ"
+			],
+			[
+				"c",
+				"Close	error ƒ"
+			],
+			[
+				"R",
+				"RUnlock	 ƒ"
+			],
+			[
+				"va",
+				"village	struct ʈ"
+			],
+			[
+				"Gen",
+				"GenVillageId	uint64 ƒ"
+			],
+			[
+				"New",
+				"NewVillage	*village ƒ"
+			],
+			[
+				"p",
+				"PlayerInfo	*rpc.PlayerInfo ν"
+			],
+			[
+				"dbw",
+				"DBWriteResult	struct ʈ"
+			],
+			[
+				"d",
+				"DBQuery	struct ʈ"
+			],
+			[
+				"rp",
+				"rpc	 package ρ"
+			],
+			[
+				"log",
+				"logger	 package ρ"
+			],
+			[
+				"gen",
+				"GenPlayerId	uint64 ƒ"
+			],
+			[
+				"Add",
+				"AddUint32	new uint32 ƒ"
+			],
+			[
+				"un",
+				"UnixNano	int64 ƒ"
+			],
+			[
+				"Lo",
+				"LockServices	struct ʈ"
+			],
+			[
+				"Lock",
+				"LockServer	struct ʈ"
+			],
+			[
+				"i",
+				"GetIsobj	bool ƒ"
+			],
+			[
+				"re",
+				"Request	Request ν"
+			],
+			[
+				"o",
+				"objectType	struct ʈ"
+			],
+			[
+				"a",
+				"AssignableTo	bool ƒ"
+			],
+			[
+				"t",
+				"TypeOf	reflect.Type ƒ"
+			],
+			[
+				"s",
+				"String	*string ƒ"
+			],
+			[
+				"out",
+				"outfile	*os.File ν"
+			],
+			[
+				"con",
+				"config	map[string]interface{} ʈ"
+			],
+			[
+				"C",
+				"csvFile	*string ν"
+			],
+			[
+				"cs",
+				"csvFile	*string ν"
+			],
+			[
+				"new",
+				"NewTimer	*time.Timer ƒ"
+			],
+			[
+				"pri",
+				"Println	n int, err error ƒ"
+			],
+			[
+				"err",
+				"err3	 ν"
+			],
+			[
+				"b",
+				"BigEndian	binary.bigEndian ν"
+			],
+			[
+				"g",
+				"Gosched	 ƒ"
+			],
+			[
+				"cn",
+				"cnServer	*connector.CNServer ν"
+			],
+			[
+				"n",
+				"NewProtoBufConn	conn rpc.RpcConn ƒ"
+			],
+			[
+				"uin",
+				"Uint64	 Ɩ"
+			],
+			[
+				"k",
+				"Kind	reflect.Kind ƒ"
+			],
+			[
+				"W",
+				"WriteRequest	error ƒ"
+			],
+			[
+				"um",
+				"Unmarshal	error ƒ"
+			],
+			[
+				"co",
+				"conn	*ProtoBufConn ν"
+			],
+			[
+				"Addu",
+				"AddUint64	new uint64 ƒ"
+			],
+			[
+				"IN",
+				"Info	 ƒ"
+			],
+			[
+				"Rp",
+				"RpcConn	interface ¡"
+			],
+			[
+				"ca",
+				"cachePool	struct ʈ"
+			],
+			[
+				"al",
+				"TotalAlloc	uint64 ν"
+			],
+			[
+				"q",
+				"query_reply2	proto.DBQueryResult ν"
+			],
+			[
+				"P",
+				"Println	n int, err error ƒ"
+			],
+			[
+				"r",
+				"Recycle	 ƒ"
+			],
+			[
+				"test",
+				"testcnt	 ν"
+			],
+			[
+				"no",
+				"Now	time.Time ƒ"
+			],
+			[
+				"spri",
+				"Sprintf	string ƒ"
+			],
+			[
+				"D",
+				"DBDelResult	struct ʈ"
+			],
+			[
+				"ro",
+				"Rows	struct ʈ"
+			],
+			[
+				"db",
+				"dbpool	*dbPool ν"
+			],
+			[
+				"F",
+				"Fatal	 ƒ"
+			],
+			[
+				"E",
+				"Error	 ƒ"
+			],
+			[
+				"I",
+				"Info	 ƒ"
+			],
+			[
+				"ma",
+				"func main	func main {...} ʂ"
+			],
+			[
+				"de",
+				"Debug	 ƒ"
+			],
+			[
+				"imp",
+				"import	import (...) ʂ"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "src/dbserver/dbserver.go",
+			"settings":
+			{
+				"buffer_size": 3288,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/rpcplus/debug.go",
+			"settings":
+			{
+				"buffer_size": 2168,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/dbserver/table.go",
+			"settings":
+			{
+				"buffer_size": 4890,
+				"line_ending": "Windows"
+			}
+		},
+		{
+			"file": "src/dbserver/debug.go",
+			"settings":
+			{
+				"buffer_size": 1075,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/router/server.go",
+			"settings":
+			{
+				"buffer_size": 15,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/router/client.go",
+			"settings":
+			{
+				"buffer_size": 15,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/router/router.go",
+			"settings":
+			{
+				"buffer_size": 462,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/connector/cnserver.go",
+			"settings":
+			{
+				"buffer_size": 3616,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/connector/util.go",
+			"settings":
+			{
+				"buffer_size": 2272,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/rpcplus/client.go",
+			"settings":
+			{
+				"buffer_size": 10864,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/connector/village.go",
+			"settings":
+			{
+				"buffer_size": 1154,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/rpc/server.go",
+			"settings":
+			{
+				"buffer_size": 9200,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "src/connector/player.go",
+			"settings":
+			{
+				"buffer_size": 1352,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"command_palette":
+	{
+		"height": 167.0,
+		"selected_items":
+		[
+			[
+				"gosub de",
+				"GoSublime: Default Settings"
+			],
+			[
+				"Package Control: ",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 449.0
+	},
+	"console":
+	{
+		"height": 257.0
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/village.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/cnserver.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/lock_helper.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpc/server.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/proto/player_method.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/center/center.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/center/lock_server.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/pools/roundrobin.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/proto/lock_proto.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/tools/center/main.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/util.go",
+		"/Users/chopdown/Dev/GameHub/common/proto/msg.proto",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpc/conn.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/tools/cnserver/main.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/dbserver/table.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/tools/dbserver/main.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpcplus/server.go",
+		"/Users/chopdown/Dev/GameHub/Server/etc/dbserver.json",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/player.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/kv_helper.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/dbserver/config.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/dbserver/db_pool.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpc/debug.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/dbserver/debug.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/center/config.go",
+		"/Users/chopdown/Library/Application Support/Sublime Text 2/Packages/GoSublime/CHANGELOG.md",
+		"/Users/chopdown/Dev/GameHub/Server/src/center/lock_services.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/tools/testclient/main.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpc/_rpcjob.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpc/msg.pb.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/dbserver/dbserver.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/stats/rates.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/tools/csv2xml/main.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpcplus/jsonrpc/server.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpcplus/jsonrpc/client.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpcplus/jsonrpc/all_test.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpc/msg.proto",
+		"/Users/chopdown/Dev/GameHub/server/test/out.xml",
+		"/Users/chopdown/Dev/GameHub/server/test/a.xml",
+		"/Users/chopdown/Dev/GameHub/Server/3rdpkg/src/code.google.com/p/goprotobuf/proto/message_set.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/rpc/rpcjob.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/server/msg.proto",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/server/server.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/dbserver/cache_pool.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/server/conn.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/server/rpcjob.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/server/msg.proto",
+		"/Users/chopdown/Dev/GameHub/test/a.json",
+		"/Users/chopdown/Dev/GameHub/Server/src/stats/counters.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/stats/ring.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/stats/states.go",
+		"/Users/chopdown/Dev/GameHub/Server/3rdpkg/src/github.com/garyburd/redigo/redis/pool.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/server/msg.pb.h",
+		"/Users/chopdown/Dev/GameHub/Server/src/connector/server/msg.pb.cc",
+		"/Users/chopdown/Dev/GameHub/Server/src/stats/histogram.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/stats/states_test.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/jscfg/jscfg.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/logger/logger.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/pools/numbered.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/proto/db_proto.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/dbserver/dbservices 16-50-33-603.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/dbserver/dbservices.go",
+		"/Users/chopdown/Dev/GameHub/Server/bin/dbserver",
+		"/Users/chopdown/Library/Application Support/Sublime Text 2/Packages/GoSublime/GoSublime.sublime-settings",
+		"/Users/chopdown/Dev/GameHub/Server/src/cmd/dbserver/main.go",
+		"/Users/chopdown/Dev/GameHub/Server/3rdpkg/src/github.com/bradfitz/gomemcache/memcache/memcache.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/slog/slog.go",
+		"/Users/chopdown/Dev/GameHub/Server/src/log/log.go",
+		"/Users/chopdown/Dev/GameHub/Server/Server.sublime-project",
+		"/Users/chopdown/Dev/DSanguo_Programer/Server/DBServer/main.go",
+		"/Users/chopdown/Tools/GoAgent/local/proxy.ini"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"",
+			"/Users/chopdown/Dev/GameHub/Server/src/dbserver",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"x",
+			"WriteRequest",
+			"new(Call)",
+			"Call",
+			"input()",
+			"ReadResponseBody",
+			"ServeHTTP(",
+			"ServerCfg",
+			"DBConfig",
+			"DefaultServer",
+			"numCalls",
+			"serverId",
+			"ReadRequestHeader",
+			"EOF",
+			"ServeConnWithContext",
+			"ServeConn(",
+			"ServeConn",
+			"readRequest",
+			"call(",
+			"Write",
+			"32",
+			"GetN",
+			"name",
+			"is",
+			"connMap",
+			"GetId",
+			"atomic",
+			"NewLock",
+			"serviceMap",
+			"call",
+			"							\n",
+			"NewProtoBufConn",
+			"listener",
+			"WriteRequest",
+			"a",
+			"GetRequestBody",
+			"WriteO",
+			"log",
+			"loglogger",
+			"NumOut",
+			"log",
+			"getRequest",
+			"RequestWra",
+			"{\n",
+			"append",
+			"broken",
+			"bucketCutoffs",
+			"NewHistogram",
+			"buckets",
+			"query",
+			"Sprint",
+			"[]*dbPool",
+			"[]*cachePool",
+			"Fatal",
+			"cachePools",
+			"[]*cachePool",
+			"dbPools",
+			"Key",
+			"connectionChan",
+			"value",
+			"logger",
+			"	\n",
+			"fmt",
+			"end",
+			"start",
+			"aaa",
+			"\")\n",
+			"aaa",
+			"waitCount",
+			"Redact",
+			"Stack",
+			"lk",
+			"getConn",
+			"freeconn",
+			"maxIdleConns",
+			"debugHTTP"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"DBConfig",
+			"MySQLConfig",
+			"dbGroup",
+			"cacheGroup",
+			"cacheGroups",
+			"cacheGroup",
+			"dbGroups",
+			"dbGroup"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "src/dbserver/dbserver.go",
+					"settings":
+					{
+						"buffer_size": 3288,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								566,
+								566
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 196.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "src/rpcplus/debug.go",
+					"settings":
+					{
+						"buffer_size": 2168,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1630,
+								1638
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 341.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 2,
+					"file": "src/dbserver/table.go",
+					"settings":
+					{
+						"buffer_size": 4890,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								125,
+								125
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1216.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 3,
+					"file": "src/dbserver/debug.go",
+					"settings":
+					{
+						"buffer_size": 1075,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								439,
+								439
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 4,
+					"file": "src/router/server.go",
+					"settings":
+					{
+						"buffer_size": 15,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15,
+								15
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 5,
+					"file": "src/router/client.go",
+					"settings":
+					{
+						"buffer_size": 15,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								15,
+								15
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 6,
+					"file": "src/router/router.go",
+					"settings":
+					{
+						"buffer_size": 462,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								462,
+								462
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 7,
+					"file": "src/connector/cnserver.go",
+					"settings":
+					{
+						"buffer_size": 3616,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								3360,
+								3360
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2243.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 8,
+					"file": "src/connector/util.go",
+					"settings":
+					{
+						"buffer_size": 2272,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2046,
+								2046
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 776.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 9,
+					"file": "src/rpcplus/client.go",
+					"settings":
+					{
+						"buffer_size": 10864,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								2213,
+								2213
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 1011.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 10,
+					"file": "src/connector/village.go",
+					"settings":
+					{
+						"buffer_size": 1154,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								786,
+								786
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 60.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 11,
+					"file": "src/rpc/server.go",
+					"settings":
+					{
+						"buffer_size": 9200,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								6008,
+								6008
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 2892.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				},
+				{
+					"buffer": 12,
+					"file": "src/connector/player.go",
+					"settings":
+					{
+						"buffer_size": 1352,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1108,
+								1108
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Go/Go.tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 252.0,
+						"zoom_level": 1.0
+					},
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 0.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"replace":
+	{
+		"height": 64.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+			[
+				"",
+				"src/tools/testclient/main.go"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 229.0,
+	"status_bar_visible": true
+}

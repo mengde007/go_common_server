@@ -1,0 +1,2869 @@
+package rpc;
+
+message Rpc{                                        //所有协议基础包装（上传）
+	repeated Request request = 1;
+}
+
+message Request{                                    //基础协议（上传）
+	required string method = 1;                        //调用的服务器方法
+	optional bytes serialized_request = 2;             //请求内容
+}
+
+message Msg{                                        //提示消息（下发）
+	optional string code = 1;                          //消息代码，配置表中读取
+	optional string text = 2;                          //直接显示消息内容
+}
+
+message MsgArg {                                    //带参数消息的参数（下发）
+    optional string s = 1;                              //文本参数
+    optional int32 i = 2;                               //整型参数
+}
+
+message FormatedMsg {                               //带参数提示消息（下发）
+    required string code = 1;                           //配置表format字符串id
+    repeated MsgArg args = 2;                           //参数列表
+}
+
+message SyncError{                                  //服务器同步错误（下发）
+	optional string text = 1;                          //错误内容
+}
+
+message RpcErrorResponse{                           //服务器协议调用失败（下发）
+	required string method = 1;                        //调用方法
+	required string text = 2;                          //失败原因
+}
+
+message LoginCnsInfo{                               //连接到游戏服务器的消息（下发）
+    required string cnsIp = 1;                          //游戏服务器的ip，已废弃
+    required string gsInfo = 2;                         //gateserver验证信息，已废弃
+    optional uint32 versionOld = 3;                     //最小版本号
+    optional uint32 versionNew = 4;                     //最大版本号
+    optional string downloadUrl = 5;                    //更新链接
+}
+
+message LoginChatServerInfo{                        //下发连接chatserver凭证（下发，已废弃）
+    required string authKey = 1;                        //凭证串
+}
+
+message WaitLogin{                                  //登陆途中正被攻打消息（下发）
+    required uint32 time = 1;                           //被攻击剩余时间
+}
+
+enum GameLocation{                                  //游戏内使用渠道号（枚举）
+    InvaildChannel = 0;                                 //无效渠道
+    Robot = 3;                                          //机器人渠道
+    IosGuest = 4;                                       //游客渠道
+    Tencent_Android_QQ = 7;                             //android 手q
+    Tencent_Android_Weixin = 8;                         //android 微信
+    Tencent_IOS_QQ = 9;                                 //ios 手q
+    Tencent_IOS_Weixin = 10;                            //ios 微信
+}
+
+enum ThirdPartyType{                                //第三方游戏渠道（枚举，已废弃）
+    None = 0;
+    GameCenter = 1;
+    GooglePlus = 2;
+}
+
+enum IMType{                                        //登陆工具类型（枚举）
+    QcTest = 0;                                         //测试
+    QQ = 1;                                             //qq
+    Weixin = 2;                                         //微信
+}
+
+message Login{                                      //登陆，游客账号覆盖（上传）
+    enum Platform {                                     //平台（枚举）
+        Android = 1;                                        //安卓
+        Ios = 2;                                            //ios
+        All = 3;                                            //全平台
+    }
+
+    enum UidCoverWay {                                  //覆盖方式，游客绑定时用（枚举）
+        None = 0;                                           //无
+        UseGuest = 1;                                       //使用当前游客账号数据
+        UseBefore = 2;                                      //使用之前绑定账号数据
+    }
+
+    optional string uid = 1;                            //uid，用户id，仅机器人渠道有效
+    required string gatekey = 2;                        //gateserver key，已废弃
+    optional GameLocation channelid = 3;                //渠道号
+    optional uint32 platformType = 4;                   //平台类型
+    optional string openid = 5;                         //openid，sdk取得
+    optional string openkey = 6;                        //openkey，sdk取得
+    optional string pay_token = 7;                      //pay_token，sdk取得
+    optional string pf = 8;                             //pf，sdk取得
+    optional string pfkey = 9;                          //pfkey，sdk取得
+    optional string clientversion = 10;                 //clientversion，sdk取得
+    optional string hardwareinfo = 11;                  //hardwareinfo，sdk取得
+    optional string networktype = 12;                   //networktype，sdk取得
+    optional string serviceprovidername = 13;           //serviceprovidername，sdk取得
+    optional uint32 registerchannel = 14;               //registerchannel，sdk取得
+    optional uint32 loginchannel = 15;                  //loginchannel，sdk取得
+    optional uint32 versionCode = 16;                   //versionCode，sdk取得
+    optional string bindguestuid = 17;                  //绑定的游客账号id，已废弃
+    optional UidCoverWay coverway = 18;                 //覆盖方式
+}
+
+message AskGuestBindWay {                           //服务器询问绑定方式（下发）
+}
+
+message GuestBindOk {                               //绑定成功（下发）
+    optional bool success = 1;                          //成功与否
+    optional Login.UidCoverWay way = 2;                 //绑定方式
+}
+
+message LoginResult{                                //登陆结果（下发）
+    enum Result {                                       //结果类型（枚举）
+        OK = 0;
+        NOTEXIST = 1;
+        SERVERERROR = 2;
+        ISONFIRE = 3;
+        USERNOTFOUND = 4;
+        GATEKEYERROR = 5;
+        TX_AUTH_FAILED = 6;                                 //腾讯校验失败，客户端会重新拉取授权
+        VERSION_TOO_OLD = 7;
+        FREEZE = 8;                                         //账号被封
+        MAXPLAYERS = 9;                                     //人数上限
+    }
+
+    required Result result = 1 [default = OK];          //结果
+    required uint32 server_time = 2;                    //服务器时间，同步客户端时间差
+    optional string errmsg = 3;                         //失败消息
+}
+
+
+enum CharacterType{                                 //兵种类型定义
+	InvalidType = 0;
+
+    CanTrainCharBegin = 0;                              //自己能够训练的普通兵开始
+	Barbarian = 1;
+	Archer = 2;
+	Goblin = 3;
+	Giant = 4;
+	WallBreaker = 5;
+	Balloon = 6;
+	Wizard = 7;
+	Healer = 8;
+	Dragon = 9;
+	PEKKA = 10;
+    CanTrainCharEnd = 11;                               //自己能够训练的普通兵种结束，预留50个
+    
+    DarkTroopsBegin = 50;                               //紫金兵开始
+    Minion = 51;
+    HogRider = 52;
+    Valkyrie = 53;
+    DarkTroopsEnd = 54;                                 //紫金兵结束，预留100个
+
+    NormalCharBegin = 150;                              //自己不能训练，但是普通兵开始，系统送的特殊兵
+    NewbieDragon = 151;
+    NewbiePEKKA = 152;
+    NewHealer = 153;
+    NewDragon = 154;
+    NewPEKKA = 155;
+    NewValkyrie = 156;
+    NormalCharEnd = 157;                                //普通兵种结束，预留300个
+
+    HeroBegin = 300;                                    //英雄开始
+    Yuanfang = 301;
+    Lvbu = 302;
+    Diaochan = 303;
+    Guanyu = 304;
+    Yuanxiuqi = 305;
+	Yanliang = 306;
+	Wenchou = 307;
+	Barbariandz = 308;
+	Archerdz = 309;
+	Goblindz = 310;
+	Giantdz = 311;
+	Wizarddz = 312;
+	Liubei = 313;
+	Zhangfei = 314;
+	NewbieLiubei = 315;
+	NewbieZhangfei = 316;
+	NewbieGuanyu = 317;
+    Zhangliang = 318;
+    Huangpusong = 319;
+    Chengyuanzhi = 320;
+    Bocai = 321;
+    Liunian = 322;
+    Zhanglu = 323;
+    Zhangbao = 324;
+    Guanhai = 325;
+    Zhangning = 326;
+    Xiahouyuan = 327;
+    Gongsunzan = 328;
+    Yambaihu = 329;
+    Lingtong = 330;
+    Lvlingqi = 331;
+    Weiyan = 332;
+    Zhoutai = 333;
+    Guanfeng = 334;
+    Xinxianying = 335;
+    Huanggai = 336;
+    Xuchu = 337;
+    Yuanshao = 338;
+    Liaohua = 339;
+    Lidian = 340;
+    Caoren = 341;
+    Guanping = 342;
+    Mayunlu = 343;
+    Zhangjiao = 344;
+    Ganning = 345;
+    Lvmeng = 346;
+    Zhangliao = 347;
+    Zhanghe = 348;
+    NewbieLvbu = 349;
+    NewbieGaoshun = 350;
+	Xingcai = 351;
+	Xiaoqiao = 352;
+	Daqiao = 353;
+	Caiwenji = 354;
+	Taishici = 355;
+	Sunshangxiang = 356;
+	Xiahoudun = 357;
+	Guojia = 358;
+	Huangyueying = 359;
+	Zhurongfuren = 360;
+	Huangzhong = 361;
+	Zhenji = 362;
+	Bulianshi = 363;
+	Dongzhuo = 364;
+	Zhaoyun = 365;
+    HeroEnd = 366;                                      //英雄结束，不能超过1000，与邮件冲突
+
+    CharacterCount = 366;                               //总数量
+}
+
+enum SpellType{                                     //丹药类型
+    LighningStorm = 1;                                  //闪电丹
+    HealingWave = 2;                                    //回春丹
+    Haste = 3;                                          //狂热丹
+    Jump = 4;                                           //暂时未使用
+    Xmas = 5;                                           //暂时未使用
+}
+
+message Spell{                                      //丹药（通用）
+    required SpellType type = 1;                        //丹药类型
+    required uint32 count = 2;                          //数量
+    optional uint32 level = 3;                          //等级
+}
+
+message SpellQueue{                                 //丹药制造队列（下行）
+    required Spell spell = 1;                           //丹药列表
+    required uint32 start_time = 2;                     //开始制造时间
+}
+
+message Character{                                  //角色（通用）
+    required CharacterType type = 1;                    //角色类型
+    required uint32 count = 2;                          //角色数量
+    optional uint32 level = 3;                          //角色等级
+    optional uint32 heroIndex = 4 [default = 65535];    //在英雄房的索引
+}
+
+enum HeroAction {                                   //武将行为枚举
+    IvalidAction = 0;
+    HeroFight = 1;				    //出战
+    HeroDefend = 2;				    //进驻铜雀台
+    HeroAdvise = 3;			            //预留军师，暂时无用
+    ActionCount = 4;
+}
+
+message Hero{                                       //武将
+    required Character character = 1;			//基础角色属性
+    optional uint32 upgradeTime = 2;			//升级时间(时间戳)
+    optional uint32 restTime = 3;			//休息时间
+    optional uint32 dieTime = 4;			//死亡时间
+    optional uint32 curIndex = 5;			//当前索引（所在的建筑索引）
+    optional uint32 preIndex = 6;			//之前的索引（上一次所在建筑索引）
+    optional uint32 dpsAbility = 7;			//攻击能力值
+    optional uint32 hpAbility = 8;			//血量能力值
+    repeated uint32 randomskill = 9;			//随机技能
+    optional OperateHeroMethod getWay = 10;		//获取渠道
+    optional HeroAction action = 11;			//武将当前的行为
+}
+
+enum AddHeroPieceWay {                              //获取武将碎片的枚举
+    AddPieceByInvalid = 0;
+    AddPieceByMail = 1;					//邮件
+    AddPieceByPVE = 2;					//pve
+    AddPieceByLottery = 3;				//抽奖
+    AddPieceCount = 4;
+}
+
+message HeroPiece {                                 //武将碎片结构
+    optional Hero heroInfo = 1;				//武将结构
+    optional uint32 percent = 2;			//百分比
+    optional AddHeroPieceWay way = 3;			//获取途径
+}
+
+message HeroContainer{                              //武将容器，存放武将信息
+    repeated Hero 		heroes = 1;		//玩家拥有的武将
+    optional Hero 		emailHero = 2;		//当前的邮件武将
+    optional Hero 		searchHero = 3;		//当前搜索到的武将
+    optional Hero 		giveHero = 4;		//预留
+    optional Hero 		composeHero = 5;	//当前碎片组成的武将
+    repeated HeroPiece 	heroPiece = 6;			//玩家的武将碎片信息
+    repeated uint32    	haveHero = 7;                   //拥有过的武将记录
+    optional uint32		gridCount = 8;                  //格子数量
+    optional uint32		lastLottery = 9;                //上次抽奖时间
+}
+
+message CharacterQueue{                             //造兵队列
+    required Character character = 1;
+    required uint32 start_time = 2;
+    optional bool completed = 3;
+}
+
+message Ping{                                       //通用无参数协议（通用）
+	
+}
+
+message PingResult{                                 //服务器ping返回值（下发）
+    required uint32 server_time = 1;                    //服务器时间，用于客户端计算时间差
+}
+
+message BuildingId{                                 //建筑id，见建筑id表（枚举）
+	enum IdType {
+		Center = 1;
+		Walls = 2;
+		GoldStorage = 3;
+		Barrack = 4;
+		Laboratory = 5;
+		Farm = 6;
+		FoodStorage = 7;
+		TroopHousing = 8;
+		Worker = 9;
+		GoldMine = 10;
+        ArcherTower = 11;
+        Cannon = 12;
+        WizardTower = 13;
+        AirDefense = 14;
+        Mortar = 15;
+        TeslaTower = 16;
+        XBow = 17;
+        AllianceCastle = 18;
+        SpellForge = 19;
+        Bomb = 21;
+        GiantBomb = 22;
+        Eject = 23;
+        GeneralHouse = 24;
+        Deco = 25;
+        Barrier = 26;
+        AirBomb = 27;
+        SeekingAirMine = 28;
+        DarkElixirPump = 29;
+        DarkElixirStorage = 30;
+        FriendHouse = 31;
+	    MilitaryDepot = 32;
+		TongQueTai = 33;
+        DarkBarrack = 34;
+        End = 35;
+	}
+
+    required IdType type = 1;                           //建筑类型
+    required uint32 index = 2;                          //建筑索引
+}
+
+message MoveTo{                                     //移动建筑物（上行）
+    required BuildingId id = 1;                         //建筑id
+    required Position p = 2;                            //移动到的位置
+}
+
+//批量移动
+message MoveToBatch{
+	repeated MoveTo moves = 1; 
+}
+
+message CreateTo{                                   //创建建筑物（上行）
+    required BuildingId id = 1;                         //建筑id
+    required Position p = 2;                            //位置
+    optional uint32 level = 3;                          //建筑等级，装饰物用
+}
+
+message SellBuilding{                               //出售建筑物（上行）
+    required BuildingId id = 1;                         //建筑id
+}
+
+message Training{                                   //造兵（上行）
+    required BuildingId id = 1;                         //建筑id
+    required Character character = 2;                   //兵种id
+}
+
+message CancelTraining{                             //取消造兵
+    required BuildingId id = 1;                         //建筑id
+    required Character character = 2;                   //兵种id
+}
+
+message Shield{                                     //护盾（下发）
+    required uint32 start_time = 1;                     //开始时间
+    required uint32 total_time = 2;                     //总时间
+}
+
+enum ShopItemType {                                 //商店购买商品类型（枚举）
+	ShopItem_Gold = 1;
+	ShopItem_Food = 2;
+	ShopItem_Gem = 3;
+	ShopItem_Wuhun = 4;
+	ShopItem_OneDayShield = 5;
+	ShopItem_TwoDayShield = 6;
+	ShopItem_OneWeekShield = 7;
+	ShopItem_Drill1 = 8;
+	ShopItem_Drill12 = 9;
+	ShopItem_Drill150 = 10;
+    ShopItem_FriendDrill1 = 11;
+	ShopItem_FriendDrill12 = 12;
+	ShopItem_FriendDrill150 = 13;
+    ShopItem_BattleAccelerate = 14;
+    ShopItem_TiLi = 15;
+}
+
+message ShopInfo{                                   //商品信息（下发）
+    required ShopItemType type = 1;                     //商品类型
+    optional uint32 cd_time = 2;                        //cd时间，护盾用
+}
+
+message TryBuy{                                     //购买商品（上行）
+    required ShopItemType type = 1;                     //商品类型
+    optional uint32 num = 2;                            //数量
+}
+
+//任务结构数据，该数据将以数据形式保存在玩家扩殿数据上
+message Task{
+	required string name = 1;		//任务ID
+	required uint32 progress = 2;		//当前任务进度
+	optional uint32 finished_time = 3;	//任务的完成时间，如果是零的话表示未完成
+}
+
+//任务类型的定义。。。
+enum TaskType {
+    TT_None = 0;
+    TT_Online = 1;     //上线时
+    TT_Finish_PVP = 2; //完成玩家对战时
+    TT_Finish_PVP_On3Star = 3;  //完成对战3星时
+    TT_Finish_Execise = 4;      //完成一场自我演习时
+    TT_Finish_PVP_PVE_RobGold = 5;//PVP或PVE结算时,掠夺N元宝
+    TT_Finish_PVP_PVE_RobFood = 6;//PVP或PVE结算时,掠夺N粮草
+    TT_BeOnAttack = 7;         //被攻击时
+    TT_Trophy_CountChange = 8; //令旗数量发生变化时
+    TT_Open_BattleLogMenu = 9; //打开战斗记录界面
+    TT_Open_RankMenu = 10;     //打开排行榜界面
+    TT_Use_Hero = 11;          //使武将进行N场战斗用
+    TT_Replay_BattleLog = 12;  //观看N次战斗记录
+    TT_Revenge_Player = 13;    //复仇N个玩家
+    TT_Build_Deco = 14;        //修建1个装饰品
+    TT_Join_Alliance = 15;     //成功加入1个联盟
+    TT_Finish_PVE = 16;        //通关任意1关单机关卡
+    TT_Finish_ResourceCollect = 17;    //完成N次资源采集动作
+    TT_Upgrade_Building = 18;  //建筑升级(通用)
+    TT_NewConstruct_Building = 19; //建筑新建(通用)
+    TT_Training_Army = 20; //训练军队(通用)
+    TT_Upgrade_Army = 21;  //升级兵种(通用)
+    TT_Get_WuHun = 22;     //获得武魂
+    TT_Expend_YuanBao = 23; //消费宝石时
+    TT_Remove_Barrier = 24; //清理障碍物时
+    TT_Destroy_Building_InBattle = 25; //战斗中摧毁建筑
+    TT_Win_PVP = 26; //赢得玩家对战的胜利
+    TT_Win_Defense = 27; //成功防御玩家进攻
+    TT_Donate_AllianceArmy = 28; //捐赠联盟兵种
+    TT_First_Recharge = 29;    //首次充值
+    TT_Buy_Diamond = 30;   //商城购买宝石数量
+    TT_Handsel_Tili = 31;  //赠送好友体力
+    TT_Start_TTT_Battle = 32;  //进行一场通天塔的战斗
+    TT_Get_PVE_StartsNum = 33; //获得征战天下的星星
+    TT_Finish_Diffcult_PVE = 34; //PVE通关进度
+    TT_Moved_Building = 35; //移动建筑
+    TT_Full_Army = 36;      //训练满人口兵力
+    TT_Destroy_Building_InPVP = 37;    //在PVP战斗中摧毁敌方主营
+    TT_Search_Hero = 38;       //探索一次
+    TT_Obtain_Hero = 39;       //获得武将
+    TT_Opeped_HeroDialog = 40; //打开武将界面
+    TT_Hero_Levelup= 41;
+    TT_Start_Build_Building = 42;//开始建造建筑
+    TT_Requst_Fried_DecTime = 43;//请求好友减时
+    TT_Opened_UnitDialog = 44;   //查看兵种属性界面
+    TT_Pve_Tax = 45;             //征税
+    TT_FriendHouse_Reward = 46;    //领取益友工坊产出
+    TT_Help_Friends = 47;    //帮助好友减时\提速
+    TT_Request_Help = 48;      //发出好友求助
+    TT_VisitEvent_Reward = 49; //得到好友事件奖励
+    TT_Do_SpePVP = 50;          //进行一场特殊PVP
+    TT_Take_NewbieReward = 51;  //领取一次新手奖励
+    TT_VisitFriend = 52;        //访问好友
+    TT_Opened_ClanDlg = 53;     //打开联盟界面
+    TT_Take_LvAward = 54;       //领取冲级礼包
+    TT_Start_Upgrade_Building = 55; //开始升级建筑
+    TT_Take_AwardEgg = 56;          //领取彩蛋
+    TT_Attack_Friend = 57;          //好友攻打
+    TT_Defence_Friend = 58;         //被好友攻打
+    TT_Open_PVPBox = 59;            //开启PVP宝箱
+    TT_Hero_OnFight = 60;           //任命武将到点将台
+    TT_Hero_OnDefend = 61;          //任命武将到铜雀台
+    TT_Open_TongQueTai = 62;          //任命武将到铜雀台
+    TT_Take_PVPBox = 63;          //领取PVP宝箱
+    
+    TT_End = 64;
+}
+
+//更新任务进度。。客户端向服务器请求更新任务进度
+message UpdateTaskInfo{
+	required string name = 1;	//任务ID
+	required uint32 progress = 2;	//任务进度
+}
+
+//客户端向服务器请求领取任务奖励
+message TryGetTaskReward {
+	required string name = 1;	//任务ID
+}
+
+message Player {                                    //玩家数据（下发）
+    enum UseType {                                      //使用途径（枚举）
+        Clan = 1;
+        Rank = 2;
+	}
+	enum ClanPower {   //联盟职位 枚举
+		None = 0;
+		Leader = 1;
+		Elder = 2;
+		Member = 3;
+	}
+	required UseType type = 1 [default = Clan];
+	required string name = 2;  //玩家名字
+	required string uid = 3;   //玩家UID
+	required uint32 trophy = 4;    //玩家杯数
+	required uint32 level = 5;     //玩家等级
+	optional uint32 exp = 6;   //玩家等级
+	optional ClanPower power = 7 [default = Member];
+	optional string clan_name = 8;     //联盟名字
+	optional uint32 clan_symbol = 9;   //联盟标志
+	optional uint32 oldrank = 10;      //旧排名
+	optional uint32 rank = 11;         //当前排名
+	optional string gender = 12;   
+	optional string headurl = 13;      //头像URL
+    optional string openid = 14;        //玩家openid
+	optional uint32 donate_num = 20;      //捐兵数量
+    optional uint32 sendpresenttime = 21;   //发送体力时间
+	optional uint32 lastweektrophy = 22;       //上周杯数
+    optional bool IsTheSameWeek = 23;   //是否是同一周标志
+    optional TTTRankPlayersInfo tttrankplayerinfo = 24;     //通天塔排名信息
+    optional uint32 lastweekTTTScore = 25;  //上周通天塔分数
+    optional uint32 requesthelptime = 26;   //好友请求帮助时间
+    optional uint32 requesthelptype = 27;   //请求帮助类型
+    //optional PlayerActivityInfo playerActivityInfo = 28;
+    repeated ClanDonateInfo playerInfo = 29;    //联盟捐兵信息
+    optional uint32   clan_take_count = 30;     //联盟拿兵数量
+    optional uint32   clan_give_count = 31;     //捐兵数量
+    optional S2SFriendDonateMsg friendDonateMsg = 32;   //好友捐兵信息
+    optional bool IsNeedFriendDonate = 33;  //是否需要好友捐兵
+    optional uint32 superleagueseg = 34;    //联赛杯段
+    optional int32 rankupdown = 36;     //排名变化情况
+    optional bool vip = 37;         //是否是QQvip
+}
+
+//联盟捐兵，用于联盟玩家捐兵信息显示
+message ClanDonateInfo{
+	optional uint32 DonateType = 1; //兵种类型
+	repeated CharacterInfo characterInfo = 2; //兵种信息
+}
+
+//具体兵种信息
+message CharacterInfo{
+	optional uint32 DonateCount = 1;//兵种数量
+	optional uint32 DonateLevel = 2;//兵种等级
+}
+
+/*
+message PlayerActivityInfo{
+	optional uint32 keepLoginTimes = 1;
+	optional string VersionInfokeep = 2;
+	optional uint32 whichDay = 3;
+	optional string VersionInfowhich = 4;
+	optional uint32 ScLoginTimes = 5;
+	optional string VersionInfoSc = 6;
+	optional uint32 SelfBattleTimes = 7;	
+	optional string VersionInfoSelf = 8;
+    optional uint32 lastGetAwardTime = 9;
+}*/
+
+message PlayerBaseInfo{                             //玩家基础信息（下发）
+    required string uid = 1;                            //uid，玩家唯一id
+    required uint64 village_id = 2;                     //村庄id
+    required string name = 3;                           //玩家名
+    required uint32 trophy = 4;                         //玩家旗子数
+    required uint32 level = 5;                          //玩家等级
+    required GameLocation gamelocation = 6;             //渠道号
+    optional string clan = 8;                           //联盟名
+    optional uint32 clan_symbol = 9;                    //联盟旗帜
+    optional string gender = 10;                        //性别
+    optional string headurl = 11;                       //头像
+    optional uint32 superleagueseg = 12;                //联赛段
+    optional uint32 superleaguesoverdue = 13;           //联赛过期时间
+    optional bool   vip = 14;                           //是否过期
+}
+
+//玩家赠送体力协议
+message SendFriendPresentInfo {
+    required string uid = 1; //玩家UID
+    required uint32 time = 2;//赠送时间
+}
+
+enum DayTimerType {                                 //每日刷新时间类型（枚举）
+	TimeForHero = 1;
+	TimeForLottery = 2;
+	
+	TimerCount = 3;
+}
+
+message DayTimer {                                  //每日刷新记录（下发）
+    required DayTimerType type = 1;                     //类型
+    required uint32 times = 2;                          //上次刷新时间
+}
+
+message DayMultiple {                               //每日清空数据（下发）
+    enum Type {                                         //枚举类型（枚举）
+        FriendSU = 1;                                       //好友加速
+        FriendRT = 2;                                       //好友减时
+        ReceiveGift = 3;                                    //接收好友赠送
+    }
+
+    required Type type = 1;                             //类型
+    repeated uint32 times = 2;                          //前次时间点
+}
+
+//自定义数据，用来保存通用玩家数据，由类型和值组成
+message CustomValue
+{
+    enum Type {
+        SpePVPTime = 1;                 //特殊PVP进行次数
+        AccumulativeRobGold =2;         //累计掠夺金钱（不论PVP或PVE）
+        AccumulativeRobFood =3;         //累计掠夺食物（不论PVP或PVE）
+        AccumulativeGetWuhun = 4;       //累计获得武魂
+        AccumulativeRmBarrier = 5;      //累计清理障碍物
+        AccumulativeWinPVP = 6;         //累计PVP战斗胜利
+        AccumulativeWinDefense = 7;     //累计防守胜利
+        AccumulativeDonateAlliance = 8; //累计联盟捐兵   
+        AccumulativeBuyGem = 9;         //累计购买宝石
+    }
+
+    required Type type = 1;		//类型
+    required uint32 value = 2;		//具体值
+
+}
+
+message PlayerExtraInfo {                           //玩家额外数据（下发）
+	optional uint32 exp = 1;       //玩家经验值
+    required uint32 diamonds = 2;   //玩家宝石数量
+    optional Shield shield = 3;     //护盾信息
+    repeated ShopInfo shop = 4;     //购买资源CD信息
+    repeated uint64 d_log_id = 5;   //防守战斗记录
+    repeated uint64 a_log_id = 6;   //进攻记录
+    repeated uint64 d_rep_id = 7;   //防守回放
+    repeated uint64 a_rep_id = 8;   //进攻回放
+    repeated Task tasks = 9;		 //任务数据
+    optional uint32 obstacle_time = 10;     //障碍物上次刷新时间
+    optional bool is_userguide_finish = 11;     //是否完成新手
+    optional LandedRewardInfo landedrewardinfo = 12; //每日连续登陆奖励数据
+    optional uint32 friend_drill_times = 13;    //好友演习次数
+    optional PlayerTTTInfo selftttinfo = 14;	     //天天闯关数据
+    optional TTTRankPlayersInfo tttrankplayerinfo = 15;     //天天闯关排行榜信息
+    optional uint32 battle_accelerate_times = 16;   //自我演习次数
+    optional uint32 guide_finished_step = 17;  //新手指引步骤
+    repeated SendFriendPresentInfo sendpresenttimes = 18; //赠送体力信息
+    optional TiLiInfo tiliinfo = 19;		     //体力数据
+    optional uint64   lastLogin = 20;           //最后登录时间
+    optional uint32 finishArmyTimes = 21;       //秒兵次数
+    optional uint32 resetTime = 22;             //每日刷新上次时间点
+    repeated DayTimer daytimers = 23;           //每日刷新类型数据
+    optional uint64 flushfinishArmyTime = 24;   //刷新秒兵次数
+    optional int64 visitEventTime = 25;         //上次发生好友事件时间
+    optional VisitEvent visit_event = 26;       //好友事件信息
+    repeated DayMultiple daymulttimers = 27;    //每日多次刷新次数信息
+    optional bool firstSearch = 28 [default = true]; //是否是第一次搜索武将
+    optional uint32 theLastCenterLevel = 29;        //上次登录主营等级
+    repeated CustomValue customvalues = 30;	//通用自定义数据
+    optional uint32 playerGetCharNum = 31;  //玩家收兵次数
+    optional SystemFriendInfo system_friend = 32;   //系统好友信息
+    optional uint32 nextsharebattletime = 33;       //分享战斗记录时间
+    optional uint32 freezetime = 34;            //封号时间
+    optional string freezereason = 35;          //封号原因
+    optional uint32 createtime = 36;            //账号创建时间
+    optional uint32 curGuidTask = 37;       //当前新手指引任务
+    optional LGAward playerGetLoginAward = 38;  //玩家登录奖励信息
+    optional uint32 newPlayerLoginTimes = 39;   //新手登录次数
+    optional JuBaoPenInfo jbp_info = 40;        // 聚宝盆信息
+    optional PlayerGetCountDownAward playerGetCDInfo = 41;  //玩家倒计时奖励信息
+    optional uint32 superleaguegroup = 42;  //联赛杯段
+    optional uint32 superleaguelastseg = 43;    //最后参加联赛杯段
+    optional WipeInfo wipeinfo = 44;            //扫荡信息
+    optional string spepvpdata = 45;		//特殊PVP标志
+	optional uint32	balance = 46;          //上次余额
+    optional uint32 giftbalance = 47;       //上次赠送余额
+    optional string speevents = 48;		//特殊事件标志
+    optional PVPBoxInfo box_info = 49;  //废弃
+    optional TiLiInfo defendbattletimes = 50;	//防守战，也就是怪物攻城，学名黄巾反叛的次数信息
+    optional uint32 dbunlockstage = 51;		//黄巾反叛解锁关卡
+	optional bool firstLotteryMore = 52 [default = true];  //第一次武将抽取
+    optional bool borngem = 53;         //是否赠送新手宝石
+}
+
+//新手前三天奖励，客户端保存用
+message LGAward {                                   
+   optional bool isGetFirst = 1;//是否领了第一天
+   optional bool isGetSecond = 2;//是否领了第2天
+   optional bool isGetThird = 3;//是否领了第3天
+}
+
+message PlayerInfo{                                 //玩家信息（下发）
+    required PlayerBaseInfo base = 1;                   //基础信息
+    required PlayerExtraInfo extra = 2;                 //额外信息
+    optional Player.ClanPower power = 3 [default = Member]; //联盟职位
+}
+
+//玩家倒计时奖励协议
+message PlayerGetCountDownAward {
+	optional uint32 playerGetAwardTime = 1; //玩家获取奖励时间
+	optional uint32 playerGetWhichAward = 2;//玩家获取奖励等级
+}
+
+message UpdatePlayerInfo{                           //玩家信息更新（下发）
+    optional string name = 1;
+    optional uint32 gold = 2;
+    optional uint32 food = 3;
+    optional uint32 wuhun = 4;
+    optional uint32 diamonds = 5;
+    optional uint32 trophy = 6;
+    optional string clan = 7;
+    optional uint32 clan_symbol = 8;
+    optional Shield shield = 9;
+    optional uint32 level = 10;
+    optional uint32 exp = 11;
+    optional ShopInfo shop = 12;
+    optional uint32 drill_times = 13;
+    optional string googlePayNonce = 14;
+    optional uint32 friend_drill_times = 15;
+    optional bool isTTTwined = 16;
+    optional bool  isTTTStart = 17;
+    optional bool  isTTTOver = 18;
+    repeated TTTBuff tttbuffs = 19;
+    optional uint32 battle_accelerate_times = 20;
+    optional uint32 tili = 21;
+    optional uint32 theNextTime = 22;
+    repeated GetTTTEndResourceInfo  tttendResInfo = 23;
+    optional TTTRankPlayersInfo tttrankplayerinfo = 24;
+    optional PlayerTTTInfo selftttinfo = 25;
+    optional uint32 LastCPGetStart = 26;
+    optional uint32 LastAlifeCount = 27;
+    optional bool  isUpCurMostTTTScore = 28;
+    optional bool  isUpPreMostTTTScore = 29;
+    optional TaxInfo taxInfo = 30;
+    optional TTTCostResInfo getResInfoOneTurn = 31;
+    optional uint32 defendbattletime = 32;	//黄巾反叛次数
+    optional uint32 dbtnexttime = 33;	//黄巾反叛次数恢复时间
+    optional uint32 dbunlockstage = 34;	//黄巾反叛解锁关卡
+}
+
+message FriendsExeciseInfo{                         //好友学习信息，已废弃（下行）
+    repeated uint64 f_log_id = 1;
+    repeated uint64 f_rep_id = 2;
+}
+
+//PVE税收数据
+message TaxInfo{
+    optional uint32 lastTaxtime = 1; //PVE通关后征税的开始时间
+    optional uint32 foodCount = 2;   //征税的粮食数量
+    optional uint32 goldCount = 3;   //征税的银两数量
+    optional uint32 wuhunCount = 4;  //征税的紫金数量
+    optional uint32 lastHaveTaxtime = 5; //玩家领取奖励的时间
+}
+
+message TaxPVEResource{
+}
+
+message GetTTTEndResourceInfo{
+    optional string type = 1;  //通天塔每关获取的资源类型
+    optional uint32 count = 2; //通天塔每关获取的资源数量
+}
+
+message Position{                                   //位置信息（通用）
+    required uint32 x = 1;                              //坐标x
+    required uint32 y = 2;                              //坐标y
+}
+
+message BoostTime{                                  //加速时间（下发）
+    optional uint32 start_time = 1;                     //开始时间
+    optional uint32 end_time = 2;                       //结束时间
+    optional uint32 waitfriend = 3;                     //是否等待好友请求
+    optional string helper = 4;                         //帮助者
+    optional string helperurl = 5;                      //帮助者头像url
+}
+								//以下为建筑的协议结构
+message Center{							//大本营
+	required Position p = 1;				//坐标
+    required uint32 level = 2;					//等级
+    required uint32 hp = 3;					//血量
+    required uint32 upgrade_time = 4;				//升级时间戳
+    required uint32 storage_gold = 5;				//银两存储
+    required uint32 storage_food = 6;				//粮食存储
+	optional HeroContainer heroContainer = 7;		//武将容器
+}
+
+message Walls{							//墙
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+}
+
+message GoldStorage{						//银库
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+    required uint32 storage_gold = 5;				//银两存储
+}
+
+message Barrack{						//兵营
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	repeated CharacterQueue queue = 5;			//造兵队列
+	optional BoostTime boost_time = 6;			//用于造兵加速
+}
+
+message DarkBarrack{						//紫金兵营
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	repeated CharacterQueue queue = 5;			//造兵队列
+	optional BoostTime boost_time = 6;			//加速时间
+}
+
+message LaboratoryInfo{						//兵研究结构
+	required CharacterType type = 1;			//兵种类型
+	required uint32 level = 2;				//兵种等级
+	required uint32 upgrade_time = 3;			//升级时间戳
+}
+
+message LaboratorySpellInfo{					//丹药研究结构
+	required SpellType type = 1;				//丹药类型
+	required uint32 level = 2;				//丹药等级
+	required uint32 upgrade_time = 3;			//升级时间戳
+}
+
+message Laboratory{						//兵工研究所
+	required uint32 level = 1;				//建筑等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	repeated LaboratoryInfo info = 5;			//兵种研究信息
+	repeated LaboratorySpellInfo spell_info = 6;		//丹药研究信息
+        optional BoostTime boost_time = 7;			//加速时间
+}
+
+message Farm{							//农田
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	required uint32 last_op_time = 5;			//上次采集时间
+    required uint32 res_count = 6;    				//资源数量
+    optional BoostTime boost_time = 7;				//加速时间
+    optional uint32 robed_res = 8;				//被强多资源数量
+}
+
+message FoodStorage{						//粮仓
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+    required uint32 storage_food = 5;				//银两数量
+}
+
+message TroopHousing{						//营地
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	repeated Character character = 5;			//营地的兵种队列
+}
+
+message Worker{							//工人坊
+    required uint32 hp = 1;					//血量
+	required Position p = 2;				//坐标
+}
+
+message GoldMine{						//银矿
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	required uint32 last_op_time = 5;			//上次采集时间
+    required uint32 res_count = 6;    				//资源数量
+    optional BoostTime boost_time = 7;				//加速
+    optional uint32 robed_res = 8;				//被强多数量
+}
+message ArcherTower{						//箭塔
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+}
+message Cannon{							//火炮
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+}
+message WizardTower{						//术士塔
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+}
+message AirDefense{						//破空火箭
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+}
+message Mortar{							//投石车
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+}
+message TeslaTower{						//招魂幡
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+}
+message XBow{							//诸葛连弩
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	optional uint32 AmmoCount = 5;				//子弹数量
+	optional uint32 AltAttackRange = 6;			//攻击模式
+}
+message AllianceCastle{						//联盟建筑
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	optional uint32 donate_time = 6;			//捐兵时间
+	optional string clan_name = 7;				//联盟名字
+	optional uint32 clan_symbol = 8;			//联盟图标
+}
+message SpellForge{						//炼丹房
+	required uint32 level = 1;				//等级
+    required uint32 hp = 2;					//血量
+	required Position p = 3;				//坐标
+	required uint32 upgrade_time = 4;			//升级时间戳
+	repeated SpellQueue queue = 5;				//炼丹队列
+	repeated Spell spell = 6;				//拥有的丹药队列
+    optional BoostTime boost_time = 7;				//加速
+}
+message GeneralHouse{						//点将台
+    required uint32 hp = 1;					//血量
+	required Position p = 2;				//坐标
+	required uint32 level = 5;				//等级
+	required uint32 upgrade_time = 6;			//升级时间戳
+	optional Hero fightHero = 7;				//出战武将（用于pve等）
+}
+message Deco{							//装饰物
+	required Position p = 1;				//坐标
+	required uint32 level = 2;				//等级
+    optional PVPBoxItem item = 3;				//pvp宝箱信息（打赢后有）
+}
+message Bomb{							//炸弹
+    required Position p = 1;					//坐标
+    optional uint32 level = 2;					//等级
+    optional bool isbroken = 3;					//是否有效
+    optional uint32 upgrade_time = 4;				//升级时间戳
+}
+message GiantBomb{						//火器车
+    required Position p = 1;					//坐标
+    optional uint32 level = 2;					//等级
+    optional bool isbroken = 3;					//是否有效
+    optional uint32 upgrade_time = 4;				//升级时间戳
+}
+message Eject{							//陷阱
+    required Position p = 1;					//坐标
+    optional bool isbroken = 3;					//是否有效
+}
+message AirBomb{						//孔明燃灯
+    required Position p = 1;					//坐标
+    optional uint32 level = 2;					//等级
+    optional bool isbroken = 3;					//是否有效
+    optional uint32 upgrade_time = 4;				//升级时间戳
+}
+message SeekingAirMine{						//玄天火烛
+    required Position p = 1;					//坐标
+    optional uint32 level = 2;					//等级
+    optional bool isbroken = 3;					//是否有效
+    optional uint32 upgrade_time = 4;				//升级时间戳
+}
+message Barrier{						//障碍物（树、石头）
+	required Position p = 1;				//坐标
+	required uint32 level = 2;				//等级
+	required uint32 remove_time = 3;			//移除时间点
+	optional uint32 res_num = 4;				//获取的资源数量
+        optional uint32 res_type = 5;				//获取的资源类型
+}
+//紫金官坊建筑信息
+message DarkElixirPump{
+    required uint32 level = 1;		//等级
+    required uint32 hp = 2;		//血量
+    required Position p = 3;		//位置
+    required uint32 upgrade_time = 4;	//升级时间
+    required uint32 last_op_time = 5;	//最后一次收获时间
+    required uint32 res_count = 6;	//资源量
+    optional BoostTime boost_time = 7;	//加速时间 
+    optional uint32 robed_res = 8;	//被抢的资源量
+}
+
+//紫金储司建筑信息
+message DarkElixirStorage{
+    required uint32 level = 1;		//等级
+    required uint32 hp = 2;		//血量
+    required Position p = 3;		//位置
+    required uint32 upgrade_time = 4;	//升级时间
+    required uint32 storage_wuhun = 5;	//紫金存量
+}
+
+//益友工坊信息
+message FriendHouse{
+	required uint32 level = 1;     //等级
+    required uint32 hp = 2;        //血量
+	required Position p = 3;       //位置
+	required uint32 upgrade_time = 4; //升级时间
+    optional uint32 points = 5; //益友工坊进度点数
+    optional uint32 last_time = 6; //上次领取奖励时间
+    optional uint32 times = 7; //当前领取奖励次数
+	optional string random_reward = 8; //随机奖励信息
+        optional uint32 gold = 9; //聚宝盆银两
+        optional uint32 food = 10; //聚宝盆粮食
+        optional uint32 wuhun = 11; //聚宝盆紫金
+}
+
+//玩家兵站协议（建筑信息）
+message MilitaryDepot{
+	required uint32 level = 1; //等级 
+    	required uint32 hp = 2; //血量
+	required Position p = 3;//坐标
+	optional uint32 upgrade_time = 4;//升级时间
+	repeated Character characters = 5; //驻扎军队
+	optional uint32 donate_time = 6; //联盟求援时间
+	optional uint32 friendDonate_time = 7;//好友求援时间
+}
+
+
+//game 2 client
+message TongQueTai {					//铜雀台
+	required uint32 hp = 1;				//血量
+	required Position p = 2;			//坐标
+	required uint32 level = 5;			//等级
+	required uint32 upgrade_time = 6;		//升级时间戳
+	optional Hero fightHero = 7;			//防守武将（仅pve用）
+}
+
+//村庄信息
+message VillageInfo{
+	required Center center = 1;    //主营
+	repeated Walls walls = 2;      //城墙
+    repeated GoldMine goldmine = 3;     //银矿
+    repeated Worker worker = 4;     //工人
+    repeated TroopHousing troophosing = 5;  //兵营
+    repeated FoodStorage foodstorage = 6; //粮仓
+    repeated Farm farm = 7;         //农田
+    repeated Laboratory laboratory = 8; //研究所
+    repeated Barrack barrack = 9;   //兵营
+    repeated GoldStorage goldstorage = 10;  //银库
+    repeated ArcherTower archertower = 11;  //箭塔
+    repeated Cannon cannon = 12;    //火炮
+    repeated WizardTower wizardtower = 13;  //术士塔
+    repeated AirDefense airdefense = 14;    //破空火箭
+    repeated Mortar mortar = 15;    //投石车
+    repeated TeslaTower teslatower = 16;        //招魂幡
+    repeated XBow xbow = 17;        //诸葛连弩
+    repeated AllianceCastle alliancecastle = 18;    //联盟城堡
+    repeated SpellForge spellforge = 19;        //炼丹房
+    repeated Bomb bomb = 20;        //炸弹
+    repeated GiantBomb giantbomb = 21;      //火器车
+    repeated Eject eject = 22;      //毒井
+	repeated GeneralHouse generalhouse = 23;
+    repeated Deco deco = 24;            //装饰物
+    repeated Barrier barrier = 25;      //障碍物
+    repeated AirBomb airbomb = 26;      //孔明燃灯
+    repeated SeekingAirMine seekingairmine = 27; //玄天火烛
+    repeated DarkElixirPump darkelixirpump = 28;	//紫金官坊
+    repeated DarkElixirStorage darkelixirstorage = 29;	//紫金储司
+    repeated FriendHouse friendhouse = 30;      //益友工坊
+    repeated MilitaryDepot militaryDepot = 31;  //兵站
+	repeated TongQueTai tongQueTai = 32;       //铜雀台
+    repeated DarkBarrack darkBarrack = 33;      //紫金兵营
+    optional PVPBoxInfo box_info = 34; //PVP宝箱信息 勿动
+}
+
+enum ClanSymbol{
+	SymbolMaxNum = 8;
+}
+
+//联盟信息
+message ClanInfo{
+	enum ClanType {
+		Any = 1;
+		Invite = 2;
+		Close = 3;
+	}
+	required ClanType type = 1 [default = Any]; //联盟可加入状态
+	required string name = 2;      //联盟名字
+    required uint32 symbol = 3;     //联盟标志
+	required uint32 require = 4;    //可加入的最底杯数
+	required string describe = 5;      //联盟描述
+	optional uint32 oldrank = 6;       //旧的排名
+	optional uint32 rank = 7;          //新的排名
+	optional uint32 trophy = 8;        //联盟总杯数
+	optional uint32 members = 9;       //联盟成员数量
+	optional uint32 ClanArmy = 10;     //联盟据对数量
+    optional uint32 avgtrophy = 11;     //平均杯数
+    optional int32 rankupdown = 12;     //联盟排名改变情况
+}
+
+//搜索联盟标志
+enum GetClanType {
+	GetClan_ClanStart = 1;
+	GetClan_ClanMine = 2;
+	GetClan_ClanToJoin = 3;
+	GetClan_ClanMySearch = 4;
+	GetClan_ClanOtherSearch = 5;
+	GetClan_ClanEnd = 6;
+	
+	GetClan_RankStart = 7;
+	GetClan_RankClan = 8;
+	GetClan_RankPlayer = 9;
+	GetClan_RankPlayerVisitClan = 10;
+	GetClan_RankSearch = 11;
+	GetClan_RankEnd = 12;
+}
+
+//联盟
+message Clan{
+	optional GetClanType type = 1;
+	required ClanInfo info = 2;        //联盟信息
+	repeated Player players = 3;       //联盟成员信息
+	repeated ClanDonateInfo donateInfo = 4;    //联盟捐兵信息
+}
+
+//联盟军队信息（联盟兵池）
+message ClanArmyInfo{
+	repeated ClanDonateInfo donateInfo = 1; //兵种信息
+	optional string ClanName = 2;//联盟名字
+	optional uint32 symbol = 3;//联盟旗子
+}
+
+//下发联盟信息
+message ClanInfos{
+	optional GetClanType type = 1;
+	repeated ClanInfo infos = 2;
+	repeated ClanInfo infos_ex = 3;
+}
+
+//查找联盟
+message TryGetClan{
+	optional GetClanType type = 1;
+	required string name = 2; //联盟名字
+}
+
+//搜索联盟
+message TryGetClans{
+	optional GetClanType type = 1;
+	optional string key = 2; //搜索关键字
+}
+
+//加入联盟
+message TryJoinClan{
+	optional GetClanType type = 1;
+	required string name = 2;  //联盟名字
+}
+
+//离开联盟
+message TryLeaveClan{
+	optional GetClanType type = 1;
+}
+
+//踢出玩家
+message TryKickPlayer{
+	optional GetClanType type = 1; //玩家动作类型
+	required string tar_uid = 2; //被踢出的玩家UID
+
+}
+
+
+//任命玩家联盟职位
+message TryAppointPlayer{
+	optional GetClanType type = 1;//玩家动作类型
+	required string tar_uid = 2;//被提升的玩家UID
+	required Player.ClanPower power = 3;//提升的职位
+}
+
+//查看玩家城池
+message TryVisit{
+	required string uid = 1;   //玩家UID
+    optional bool friendhelp = 2; //时候有好友请求信息
+}
+
+//复仇玩家
+message TryRevenge{
+	required string uid = 1;   //玩家UID
+	required uint64 bid = 2;   //发起复仇的战斗记录ID
+}
+
+//尝试回放战斗 client -> server
+message TryReplay{
+	required string uid = 1;	//玩家uid
+	required uint64 rid = 2;	//视频的replay id
+    optional bool share = 3;		//回放视频，是否是好友分享来的 
+}
+
+//回放失败 server -> client
+message FailedReplay{
+	required uint64 rid = 1;	//replay id
+}
+
+//请求排行榜
+message TryGetRankPlayers{
+}
+
+//顶级玩家排行数据
+message RankPlayers{
+	repeated Player rps_top = 1; //排名
+	repeated Player rps_me = 2;//自己(没用到)
+}
+
+
+//好友事件
+message VisitEvent{
+        enum Event {
+             NONE = 0;
+             BOX_FOOD = 1;
+             BOX_GOLD = 2;
+             BOX_PURPLE_GOLD = 3;
+             TREE_FOOD = 4;
+             TREE_GOLD = 5;
+             EGG_GEM = 6;
+        }
+        required Event event = 1 [default = NONE];  //好友事件类型
+        required uint32 res_count = 2;      //好友事件可得到资源
+}
+
+//服务器下发匹配到的玩家信息
+message MatchPlayer{
+	enum Act {
+		VISIT = 0;
+		ATTACK = 1;
+		REVENGE = 2;
+		FRIEND_EXECISE = 3;
+		CHALLENGE_N = 4;
+		CHALLENGE_M = 5;
+                FRIEND_ATTACK = 6;
+	}
+	required Act act = 1 [default = VISIT]; //请求匹配的条件
+	required string name = 2;  //匹配的玩家名字
+	required uint32 trophy = 3;    //匹配的玩家杯数
+	required uint32 level = 4;     //匹配的玩家等级
+	required VillageInfo v = 5;    //匹配的村庄信息
+	required uint32 own_gold = 6;  //玩家自己拥有资源数量
+	required uint32 own_food = 7;
+    required uint32 own_wuhun = 8;
+	required uint32 max_gold = 9;      //玩家最大资源数量
+	required uint32 max_food = 10;
+    required uint32 max_wuhun = 11;
+	required uint32 own_diamond = 12;  //玩家自己的宝石
+	required uint32 own_trophy = 13;   //玩家自己的杯数
+	optional uint32 own_townlevel = 14;    //玩家自己的主营等级
+	optional ClanForce clan_force = 15;    //玩家自己联盟信息
+	repeated Character own_char = 16;      //玩家自己的兵力信息
+	repeated Spell own_spell = 17;         //玩家自己丹药信息
+	optional VisitEvent visit_event = 18;  //好友事件信息
+    optional bool is_systemfriend = 19 [default = false];   //是否是系统好友
+    optional uint32 jbp_gold = 20;  //聚宝盆资源
+    optional uint32 jbp_food = 21;
+    optional uint32 jbp_wuhun = 22;
+    optional uint32 superleagueseg = 23;
+}
+
+//匹配玩家结果
+message MatchPlayerResult{
+	enum Result {
+		OK = 0;
+		NOTEXIST = 1;
+		SERVERERROR = 2;
+		ISONFIRE = 3;
+		MATCHNOTHING = 4;
+	}
+	required Result result = 1 [default = OK];
+}
+
+//战斗中放兵信息
+message AttackerInfo
+{
+    required uint32 droptime = 1;   //放兵时间
+    required CharacterType type = 2;    //放兵类型
+	required uint32 level = 3; //兵等级
+    required Position p = 4;    //放兵位置
+	optional uint32 heroIndex = 5 [default = 65535];   //英雄索引
+}
+
+//战斗中放丹药信息
+//变量含义同放兵
+message SpellInfo
+{
+    required uint32 droptime = 1;
+    required SpellType type = 2;
+	required uint32 level = 3;
+    required Position p = 4;
+}
+
+
+//兵站兵力信息
+message ClanForce{
+	optional uint32 symbol = 1;//联盟旗帜
+	repeated Character char = 2;//兵力信息
+}
+
+//丢出的兵站信息
+message ClanForceInfo
+{
+    required uint32 droptime = 1;//下兵时间
+    required ClanForce clan_force = 2;//兵力信息
+    required Position p = 3;//坐标
+}
+
+//战斗正式开始
+message NotifyBattleStart
+{
+    required uint32 randomseed = 1;
+}
+
+//战斗结束消息
+message NotifyBattleEnd
+{
+    required uint32 totaltime = 1; //总战斗时间
+}
+
+//战斗信息
+message UnitDeploy
+{
+    repeated AttackerInfo attackunits = 1;
+    repeated SpellInfo spells = 2;
+    required uint32 totaltime = 3;
+}
+
+//发往战斗服务器演算战斗的消息
+message AttackBegin
+{
+	required uint64 playerlid = 1; //玩家连接ID
+	required uint32 playerVillageLevel = 2; //玩家村庄等级
+    required VillageInfo v = 3; //村庄信息
+    required uint32 totaltime = 4;  //总战斗时间
+    required uint32 src_trophy = 5; 
+    required uint32 tar_trophy = 6;
+    optional ClanForceInfo clan_force_info = 7; //战斗联盟兵力信息
+	repeated AttackerInfo attackunits = 8; //战斗兵力信息
+    repeated SpellInfo spells = 9;  //战斗丹药信息
+    optional string playerid = 10;  //战斗数据记录使用,没有逻辑功能意义,不要擅自使用
+	repeated Hero   selfHero = 11;
+}
+
+//战斗服务器发送回来的战斗演算结果
+message AttackEnd
+{
+	required uint64 connid = 1; //连接ID
+    required VillageInfo v = 2; //村庄信息
+    required uint32 goldstolen = 3; //得到资源
+    required uint32 foodstolen = 4;
+    required uint32 damagepercent = 5; //攻打百分比
+    required uint32 starts = 6; //星数
+    required sint32 trophy = 7; //杯数
+    optional uint32 exp = 8;    //得到经验
+    optional uint32 wuhunstolen = 9;
+	repeated HeroState heroState = 10; //英雄状态
+}
+//PVE的关卡的一个难度数据
+message StageLevelData  
+{
+    required uint32 Stars = 1;				//关卡被打星星数量
+    optional uint32 CurrentGold = 2;	//关卡剩余资源银两数量
+    optional uint32 CurrentFood = 3;	//关卡剩余资源粮食数量
+    optional uint32 CurrentWuhun = 4;	//关卡剩余资源紫金数量
+    optional bool   isCanWipe = 5;		//本关是否可以扫荡
+
+}
+//PVE的每个关卡数据
+message Stage
+{
+    required uint32 StageId = 1;						//本关ID
+    repeated StageLevelData StageDatas = 2;	//本关所以难度的数据
+    optional uint32 StageReBelId = 3;				//本关反叛的反叛关卡ID
+}
+//PVE的所有关卡数据
+message PveStages
+{
+    repeated Stage Stages = 1;      //存放PVE所有关卡数据的数据结构
+    optional TaxInfo taxInfo = 2;   //PVE税收数据
+    optional uint32 rebel_time = 3; //PVE反叛时间
+}
+//PVE的扫荡数据
+message WipeInfo
+{
+    required uint32 wipeCount = 1;      //PVE每日允许扫荡的总次数
+    required uint32 fastWipeCount = 2;  //PVE每日允许快速扫荡的次数
+    required int64 freshTime = 3;	//PVE每日扫荡的刷新时间
+}
+//开始PVE战斗
+message NotifyPVEBattleStart
+{
+    required uint32 StageId = 1;         //客户端上传的PVE出征战斗开始的关卡ID
+    required uint32 StageDifficulty = 2; //客户端上传的PVE出征战斗开始的关卡难度
+}
+//结束PVE快速说扫荡
+message NotifyPVEBattleStartFastWipe
+{
+    required uint32 StageId = 1;         //客户端上传的PVE快速扫荡战斗开始的关卡ID   
+    required uint32 StageDifficulty = 2; //客户端上传的PVE快速扫荡战斗开始的关卡难度
+}
+
+//废弃
+message HeroChipData
+{
+    required string heroName = 1;        
+    required uint32 chipPercent = 2;    
+}
+//废弃
+message PVEFastWipeHeroChipData
+{
+    repeated HeroChipData Heros = 1;   
+}
+//废弃
+message PVERebelResInfo{
+    optional uint32 reBelGold = 1;    
+    optional uint32 reBelFood = 2;      
+    optional uint32 reBelWuhun = 3;    
+}
+//结束PVE战斗
+message NotifyPVEBattleEnd
+{
+    required uint32 totaltime = 1;       //客户端上传的PVE战斗的战斗时长
+    required uint32 StageId = 2;         //客户端上传的PVE战斗的关卡ID   
+    required uint32 StageDifficulty = 3; //客户端上传的PVE战斗的关卡难度
+}
+//PVE战斗结束发送给fightServer的数据信息
+message PVEAttackBegin
+{
+    required uint64 playerlid = 1;       // 玩家ID
+    required uint32 totaltime = 2;       // PVE一次战斗的时长
+    required Stage stage = 3;		 // 当前PVE战斗关卡的关卡信息
+    optional ClanForceInfo clan_force_info = 4; //参加PVE战斗的兵站信息
+    repeated AttackerInfo attackunits = 5;      //参加PVE战斗的兵力信息
+    repeated SpellInfo spells = 6;    		//参加PVE战斗的丹药信息
+    required uint32 StageDifficulty = 7;	//当前PVE战斗关卡的难度信息
+    optional uint32 StageReBelId = 8;		//当前PVE战斗关卡是反叛信息
+    optional string playerid = 9; 		//战斗记录使用,无逻辑意义,逻辑代码不要使用(同PVP中的playerid)
+	repeated Hero selfHero = 10;		//
+}
+//fightServer计算后发回的PVE数据信息
+message PVEAttackEnd
+{
+    required uint64 connid = 1;   	//连接ID
+    required Stage  stage = 2;		//关卡数据
+    required uint32 goldstolen = 3;	//掠夺到的银两数量
+    required uint32 foodstolen = 4;	//掠夺到的粮食数量
+    required uint32 wuhunstolen = 5;	//掠夺到的紫金数量
+    required uint32 exp = 6;		//PVE战斗增加的经验数量
+    required uint32 StageDifficulty = 7;	//关卡难度，用于验证
+	repeated HeroState heroState = 8;	//
+}
+
+//请求战斗记录client －> server
+message RequestBattleLogs
+{
+	enum BattleLogType {
+		Defence = 1;
+		Attack = 2;
+        FriendExecise = 3;
+		ViewShareBattle = 4;
+	}
+	required BattleLogType  battletype = 1 [default = ViewShareBattle];	//战斗记录类型
+}
+
+
+//专门提供给战斗分享用的
+message ShareBattleLog
+{
+	enum BattleLogType {
+		Defence = 1;
+		Attack = 2;
+        	FriendExecise = 3;
+	}
+	required BattleLogType  type = 1 [default = Defence];		//回放战斗类型
+	required BattleLog log = 2;					//战斗记录
+}
+
+message ShareAllBattleLogs
+{
+	repeated ShareBattleLog alllog = 1;			//所有的战斗记录
+}
+
+//server -> client 战斗记录分享，状态更新
+message UpdateFriendShareBattle {
+	enum UFSBOpType {
+		Insert = 1;
+		Remove = 2;
+		Update = 3;
+	}
+	required FriendShareBattle fsb = 1;		//战斗记录
+   	required UFSBOpType type = 2;			//更新状态
+}
+
+//server -> client 删除分享记录,战斗记录过期的时候会发生
+message RemoveFriendShareBattle {
+	required uint64 rid = 1;			//replay id
+}
+
+//所有的战斗记录，server 2 client
+message BattleLogs
+{
+	enum BattleLogType {
+		Defence = 1;
+		Attack = 2;
+        	FriendExecise = 3;
+		ViewShareBattle = 4;
+	}
+	required BattleLogType type = 1;		//战斗记录类型
+	repeated BattleLog log = 2;			//具体的战斗记录数据
+}
+//记录用于战斗回放的数据
+message BattleReplay
+{
+	required VillageInfo v = 1;   	//当时的战斗信息
+	required uint32 totaltime = 2;	//战斗时长
+	optional ClanForceInfo clan_force_info = 3; //回放参加战斗的兵站信息（时间，位置）
+	repeated ReplayAttackerInfo attackunits = 4;//回放参加战斗的兵力信息（时间，位置）
+    	repeated SpellInfo spells = 5;	//回放参加战斗的丹药信息（时间，位置）
+	optional uint32 battletime = 6; //回放开始战斗的时间
+	optional string def_name = 7;	//回放的防守方名字	 
+	optional string def_clan_name = 8;	//回放的防守方所在的联盟名字
+	optional uint32 def_clan_symbol = 9;	//回放的防守方所在的联盟旗帜
+	optional uint32 def_superleagueseg = 10;//回放的防守方联赛段位
+        optional sint32 def_trophy = 11;	//回放的防守方的杯数
+	optional string attack_name = 12; 	//回放的进攻方名字
+	optional string attack_clan_name = 13;	//回放的进攻方所在的联盟名字
+	optional uint32 attack_clan_symbol = 14;//回放的进攻方所在的联盟旗帜
+	optional uint32 attack_superleagueseg = 15;//回放的进攻方联赛段位
+	optional sint32 attack_trophy = 16;	//回放的进攻方的杯数
+        optional uint32 attack_centerLevel = 17;//回放的进攻方的主营等级
+       optional uint32 attack_time = 18;	//回放的进攻时间
+}
+//回放的玩家每次下兵的信息
+message ReplayAttackerInfo
+{
+	required uint32 droptime = 1;	 //回放的玩家下兵的时间
+    	required CharacterType type = 2; //回放的玩家下兵的兵的种类
+	required uint32 level = 3;	 //回放的玩家下兵的兵的等级
+    	required Position p = 4;	 //回放的玩家下兵的兵的位置
+	optional uint32 heroIndex = 5 [default = 65535];
+	optional uint32 dpsAbility = 6;
+	optional uint32 hpAbility = 7;
+	repeated uint32 randomskill = 8;
+}
+message UpdateBattleLog
+{
+	required uint64 bid = 1;			//battle id
+	optional BattleLog.RevengeState revstate = 2;	//跟新后的反击状态
+}
+
+//服务器上的,某些协议里有server->client
+message BattleLog
+{
+	enum ReadState {
+		UnRead = 1;
+		Read = 2;
+	}
+	enum RevengeState {
+		UnRevenged = 1;
+		Revenged = 2;
+	}
+    enum BattleType {
+         PVP = 1;
+         FRIENDATTACK = 2;
+    }
+	required uint64 bid = 1;			//战斗记录id
+	required string pid = 2;			//玩家 hid	
+	required string name = 3;			//玩家名字
+	required uint32 level = 4;			//玩家等级
+	required string clan_name = 5;			//玩家联盟名字
+	required uint32 clan_symbol = 6;		//联盟旗子
+	required uint32 trophy = 7;			//玩家杯数
+	required uint32 time = 8;			//战斗时间
+	required uint32 goldstolen = 9;			//战斗获得的银子
+    required uint32 foodstolen = 10;			//战斗获得的粮食
+	required sint32 gaintrophy = 11;		//战斗获得的杯数
+    required uint32 dmgpercent = 12;			//战斗百分比
+    required uint32 starts = 13;			//战斗完成的星数
+	required ReadState state = 14 [default = UnRead];	//是否读取过该记录
+	required RevengeState revstate = 15 [default = UnRevenged];	//是否回击过
+	repeated Character chars = 16;			//参战的兵信息
+	repeated Spell spells = 17;			//丹药信息
+	optional ClanForce clan_force = 18;		//联盟信息
+	optional uint64 rid = 19;			//replay id
+	optional uint32 wuhunstolen = 20;		//武魂
+    optional BattleType type = 21 [default = PVP];	//战斗类型
+    optional uint32 totalgold = 22; //这三个是好友攻打战斗回放使用
+    optional uint32 totalfood = 23;
+    optional uint32 totalwuhun = 24;
+}
+
+//联盟聊天
+message C2SChatAlliance
+{
+	required string ChatContent = 1;   //聊天内容
+}
+
+//世界聊天
+message C2SChatWorld
+{
+	required string ChatContent = 1;   //聊天内容
+}
+
+//联盟聊天信息
+message ClanChatMessage
+{
+	enum MsgType {    //联盟操作枚举
+		Chat = 1;
+		Create = 2;
+		Join = 3;
+		Leave = 4;
+		Kick = 5;
+		PromoteLeader = 6;
+		PromoteElder = 7;
+		DemoteElder = 8;
+		DemoteMember = 9;
+	}
+	required MsgType type = 1 [default = Chat];
+	required string uid = 2; //玩家UID
+	required string name = 3; //玩家名字
+	required uint32 level = 4;//等级
+	required Player.ClanPower power = 5; //联盟职位
+	required int64 time = 6;//发言时间
+	repeated string args = 7;//发言内容
+}
+
+//世界聊天协议
+message S2CChatWorld
+{
+    required string FromPlayerId = 1;//发言玩家UID
+    required string FromPlayerName = 2;//发言玩家名字
+    required uint32 FromPlayerLevel = 3;//发言玩家等级
+    optional string AllianceName = 4;//发言玩家联盟名字
+    optional uint32 AllianceSymbol = 5;//发言玩家联盟旗帜
+	required int64 ChatTime = 6;//发言时间
+    required string ChatContent = 7;//发言内容
+}
+
+//捐兵协议
+message C2SDonate{
+	required string uid = 1;//玩家UID
+	optional Character characters = 2; //兵种信息
+}
+
+//玩家捐兵信息（个人）
+message PlayerDonateInfo{
+	required string uid = 1;//玩家UID
+	repeated Character characters = 2; //兵种信息
+}
+
+//玩家捐兵请求（只用于服务器存储）
+message DonateInfo{
+	required string info = 1; //请求信息
+	required uint32 used_space = 2;//剩余空间
+	required uint32 total_space = 3;//总共空间
+	repeated Character characters = 4;//兵种信息
+	repeated PlayerDonateInfo pinfo = 5;//某个好友的捐兵信息
+}
+
+//玩家获取捐兵协议
+message NotifyDonateGet{
+	required string name = 1; //来源名字（好友）
+	required Character character = 2; //兵种类型
+	optional uint32 time = 3; //服务器下发的成功时间（联盟请求用）
+	optional bool  isFromFriend = 4;//是否来自好友的捐兵
+	optional string uid = 5;//玩家UID
+}
+
+//玩家捐兵协议（捐兵成功后下发）
+message NotifyDonateOff{
+	optional Character character = 1;//兵种类型
+	optional string uid = 2;//玩家UID
+	optional bool isFriend = 3;//是不是捐给好友
+	optional uint32 leftSpace = 5; //剩余空间，好友用捐兵，用于更新进度
+}
+
+message HeroChoose					//武将选中协议
+{
+    required uint32 idx = 1;				//建筑索引
+    required uint32 index = 2;				//武将索引
+	optional HeroAction action = 3;			//武将行为
+}
+
+message FindHero					//搜索武将协议
+{
+	required uint32 idx = 1;			//无意义
+}
+
+message FindHeroResult					//武将搜索结果
+{
+	optional string	result = 1;			//搜索结果字符串
+	optional uint32	count = 2;			//数量
+	optional uint32	dpsAbility = 3;			//攻击能力值
+	optional uint32 hpAbility = 4;			//血量能力值
+	optional uint32 findCount = 5;			//当前搜索次数
+	repeated uint32 randomskill = 6;		//随机技能
+}
+
+message HeroState					//武将状态，用于战斗服务器之间
+{
+	optional uint32 heroIndex = 1;			//武将索引
+	optional uint32 ghIndex = 2;			//武将所在建筑索引
+	optional bool   isDie = 3 [default = false];	//是否死亡
+	optional bool   isEnemy = 4 [default = false];	//是否是敌方武将
+}
+
+//上传新手指引完成
+message UserGuideFinish
+{
+}
+
+enum MailAttach {                                   //邮件附件（下行）
+    Food = 1;                                           //粮草
+    Gold = 2;                                           //银两
+    Gem = 3;                                            //宝石
+    Wuhun = 4;                                          //紫金
+    Tili = 5;                                           //体力
+    PercentFood = 6;                                    //百分比粮草
+    PercentGold = 7;                                    //百分比银两
+    PercentWuhun = 8;                                   //百分比紫金
+    VIP = 9;                                            //vip
+    PveTimes = 10;                                      //pve扫荡次数
+    NorEnd = 11;                                        //普通结束
+    CharBegin = 50;                                     //兵种开始
+    HeroFragBegin = 1000;                               //英雄碎片开始
+}
+
+message SysMail                                     //系统邮件（下发）
+{
+    required uint64 version = 1;                        //版本号
+    required string title = 2;                          //标题
+    required string content = 3;                        //内容
+    required uint32 sendtime = 4;                       //发送时间
+    optional string attach = 5;                         //附件
+    optional uint32 overduetime = 6;                    //过期时间
+    optional GameLocation channelid = 7;                //渠道号
+}
+
+message PlayerMail                                  //玩家身上邮件（下发）
+{
+    enum MailType {                                     //邮件枚举
+        System = 1;                                         //系统邮件
+        Normal = 2;                                         //玩家邮件
+	}
+    required string    mailid = 1;                      //邮件id
+    required MailType  mailtype = 2;                    //邮件类型
+    required string    fromname = 3;                    //发送者名字
+    optional string    fromuid = 4;                     //发送者uid
+    optional uint32    fromlevel = 5;                   //发送者等级
+    optional string    fromclan = 6;                    //发送者联盟
+    optional uint32    fromclansymbol = 7;              //发送者联盟旗帜
+    required string    title = 8;                       //标题
+    required string    content = 9;                     //内容
+    required uint32    sendtime = 10;                   //发送时间
+    optional string    attach = 11;                     //邮件附件
+    required bool      bread = 12 [default = false];    //是否已经读取
+    optional uint32    overduetime = 13;                //过期时间
+}
+
+message PlayerMailInfo                              //玩家邮件信息（下发）
+{
+    required uint64 sysmail_version = 1 [default = 0];  //系统邮件版本号
+    repeated PlayerMail maillist = 2;                   //邮件列表
+}
+
+message ClientGetMailAttach                         //领取附件（上行）
+{
+    required string    mailid = 1;                      //邮件id
+}
+
+message ClientGetMailAttachResult                   //领取附件结果（下发）
+{
+    required string mailid = 1;                         //邮件id
+    required bool hashero = 2;                          //有没有英雄
+}
+
+message ClientDeleteMail                            //删除邮件（上行）
+{
+    required string    mailid = 1;                      //邮件id
+}
+
+message ClientDeleteMailResult                      //邮件邮件结果（下发）
+{
+    required string    mailid = 1;                      //邮件id
+}
+
+message ClientSendMail                              //发送邮件给指定用户，已废弃（上行）
+{
+	required string    toplayer = 1;
+	required string    title = 2;
+	required string    content = 3;
+	optional string    attach = 4;
+}
+
+message ClientReadMail                              //标记已读（上行）
+{
+    required string    mailid = 1;                      //邮件id
+}
+
+//请求好友列表
+message C2SGetFriendsList
+{    
+}
+
+//好友列表
+message FriendsList
+{
+    repeated Player friends = 1;
+}
+
+//跑马灯公告
+message Notice
+{
+    required string content = 1;
+}
+
+//七天连续登陆奖励信息
+message LandedRewardInfo
+{
+    required uint32 LandCount = 1;	 //七天连续登陆奖励信息
+    required int64 lastLandedTime = 2;	 //七天连续登陆奖励的最新的刷新时间
+    optional int64 lastGetRewardTime = 3;//玩家最后获得的时间
+}
+//客户端上传消息要求获取奖励
+message LandedReceiveAward
+{
+}
+//天天闯关信息
+message PlayerTTTInfo
+{
+    required uint32 fightbegintime = 1;	   //每日闯关的开始时间
+    required uint32 fightdaytimes = 2;	   //每日闯关的次数
+    required uint32 curcheckpoint = 3;	   //本轮闯关的当前关卡的关数
+    required uint32 changetimes = 4;	   //本轮闯关的改变对手的次数
+    optional string matchedplayerid = 5;   //本轮闯关的当前匹配的对手ID
+    repeated Character characters = 6;	   //本轮闯关的所携带的兵力信息
+    repeated Spell spells = 7;		   //本轮闯关的所携带的丹药信息
+    optional bool  isTTTOver = 8 ;	   //本轮闯关是否结束
+    optional bool  isStart = 9 ;	   //本轮闯关是否开始
+    optional bool  isTTTEndEveryCheckpoint = 10 ;//本关闯关是否结束
+    repeated TTTBuff tttbuffs = 11;		 //本关闯关的buff信息
+    repeated Character Startcharacters = 12;	 //备份本关闯关的兵力信息
+    repeated Spell Startspells = 13;		 //备份本关闯关的丹药信息
+    repeated TTTBuff Starttttbuffs = 14;	 //备份本关闯关的buff信息
+    optional uint32 reLiveCount = 15;		 //本轮闯关的复活次数信息
+    optional uint32 curMatchLevel = 16;		 //本轮闯关的匹配对手的等级
+    optional TTTCostResInfo tttCostResInfo = 17; //本轮闯关的花费资源的信息
+    optional uint32 haveWeekGetWuhun = 18;	 //天天闯关每周获取的紫金的数量，用来判断玩家获取的紫金数量是否应该衰减
+    optional uint32 preChangeCP = 19;		 //上一轮轮闯关的上一次改变对手的关卡记录
+    optional bool  LastCPIsWined = 20;		 //上一轮闯关是否闯关成功
+    optional uint32 LastCPGetStart = 21;	 //上一轮闯关战斗获取的星星数
+    optional uint32 LastAlifeCount = 22;	 //上一轮闯关的剩余兵力信息，用以判断是结束，下一关，还是再打本官
+    optional bool  isUpCurMostTTTScore = 23;	 //本周闯关获取的最高分数
+    optional bool  isUpPreMostTTTScore = 24;	 //历史闯关获取的最高分数
+    optional TTTCostResInfo getResInfoOneTurn = 25; //本轮闯关结束获取的资源数量
+
+}
+//天天闯关的资源信息
+message TTTCostResInfo{
+    optional uint32 costgoldCount = 1;	//花费的银两数量
+    optional uint32 costfoodCount = 2;	//花费的粮食数量
+    optional uint32 costgemcount  = 3;	//花费的宝石数量
+    optional uint32 gaingoldCount = 4;	//获取的银两数量
+    optional uint32 gainfoodCount = 5;	//获取的粮食数量
+    optional uint32 gainwuhunCount= 6;	//获取的紫金数量
+    optional uint32 gaintttscoreCount = 7; //获取的分数
+    optional uint32 costwuhunCount = 8;	//花费的紫金数量
+
+}
+//天天闯关的buff信息
+message TTTBuff{
+    enum TTTBuffType {
+	TTTBuffAddArmy = 1;
+	TTTBuffAddBattleTime = 2;
+    	TTTBuffJumpCheckPoint = 3;
+	TTTBuffDetectEye = 4;
+	TTTBuffExpandInitilialCount = 5;
+	TTTBuffExpandAlifeCount = 6;
+    	TTTBuffAddSpell = 7;        
+    } 
+    required TTTBuffType type = 1;	//buff的类型
+    optional uint32 count = 2;		//buff的数量
+    repeated Character characters = 3;  //buff获取的兵力信息
+    repeated Spell spells = 4;		//buff获取的丹药信息
+    optional uint32 addtimes = 5;	//buff获取的额外战斗时间信息
+}
+
+//这条消息已经弃用
+message PlayerTTTMutliples
+{
+    required uint32 multiple = 1;
+    required uint32 freetimes = 2;
+    required uint32 randomtime = 3;
+    required uint32 curRandtimes = 4;
+}
+//客户端上传开始战斗信息
+message TryStartTTT
+{
+    repeated Character characters = 1;  //客户端上传本轮闯关的兵力信息
+    required bool isContinueBattle = 2; //本轮闯关是否结束
+    repeated Spell spells = 3;		//客户端上传本轮闯关的丹药信息
+    optional bool  isBreakORReast = 4 ; //本轮闯关是否结束
+    repeated TTTBuff tttbuffs = 5;	//本轮闯关玩家选择的buff信息
+    optional bool  isRelive = 6 ;	//本关是否复活
+}
+//天天闯关服务器下发信息
+message SynTTTCheckpoint
+{
+    required uint32 curcheckpoint = 1;  //本轮关数
+    required uint32 changetimes = 2;	//本轮改变对手次数
+    repeated Character characters = 3;	//兵力信息
+    required VillageInfo v = 4;		//对手的村庄信息
+    repeated Spell spells = 5;		//丹药信息
+    repeated TTTBuff tttbuffs = 6;	//buff信息
+    optional bool isBreakORReast = 7 ;	//是否休息或是突然断开战斗
+    optional bool isContinueBattle = 8;	//是否继续战斗
+    optional bool  isRelive = 9 ;	//是否是复活
+    required uint32 reliveCount = 10;	//本轮复活次数
+}
+
+//切换对手已经弃用
+message TryRandomTTTCharacter
+{
+    required bool free = 1;
+}
+//客户端上传切换对手
+message TryMatchNextCheckpointPlayer{
+}
+//客户端上传获取天天闯关的世界排行榜
+message TryGetTTTRankPlayers{
+}
+//服务器下发获取天天闯关的世界排行榜
+message TTTRankPlayers{
+    repeated TTTPlayer rps_top = 1;
+}
+//天天闯关排行信息
+message TTTRankPlayersInfo{
+    required uint32 curTTTScore = 1;	//天天闯关的当前分数
+    required uint32 curMostTTTScore = 2;//天天闯关的当前最高分数
+    required uint32 lastFreshTime = 3;	//天天闯关的最近刷新时间
+    optional uint32 preMostTTTScore = 4;//天天闯关的历史最高分数
+    optional uint32 reFreshPreMostTTTScoreWeekCount = 5;//天天闯关的历史最高分数的刷新时间
+}
+//服务器下发的天天闯关排行榜玩家信息
+message TTTPlayer{
+	enum UseType {
+		Clan = 1;
+		Rank = 2;
+	}
+	required UseType type = 1 [default = Clan];	//排行榜类型
+	required string name = 2;	//玩家名字
+	required string uid = 3;	//玩家uid
+	required uint32 level = 4;	//玩家等级
+       	required uint32 trophy = 5;	//玩家杯数
+	optional string clan_name = 6;	//玩家所在联盟名字
+	optional uint32 clan_symbol = 7;	//玩家所在联盟职位
+       optional uint32 tttSCoreQuery = 8;	//玩家所的天天过闯关最高分数
+       optional uint32 ranknumberQuery = 9;	//玩家所的排名
+}
+//客户端上传获取玩家自己的排行榜信息
+message TryGetScoreAndRank{
+}
+//服务器下发玩家自己的排行榜信息
+message TTTScoreAndRank{
+    required uint32 mostScore = 1;	//玩家的本周最高天天闯关分数
+    required uint32 tttScoreRank = 2;	//玩家的本周最高天天闯关排名
+}
+//以下为绑定第三方账号功能，已经弃置不用
+message Bind3rdAccount{
+    required ThirdPartyType tptype = 1;
+    required string uid = 2;
+    required string account = 3;
+}
+
+message Bind3RDAccountResult{
+    enum RstType {
+        BindOk = 1;
+        ExistAccount = 2;        
+    }
+    required RstType rst = 1;
+}
+
+message Query3RDAccount{
+    required ThirdPartyType tptype = 1;
+    required string account = 3;    
+}
+
+message Qery3RDAccountResult{
+    required bool rst = 1;
+}
+//以上为绑定第三方账号相关功能
+
+
+//通用字串，很多从客户端发向服务器的通信只需要一个字串信息。。。。
+message CommString{
+    required string str = 1;    
+}
+
+//擂台赛，已废弃
+enum ChallengeType {
+    Normal = 1;
+    Money = 2;
+}
+
+//擂台赛，已废弃
+message MoneyChallengeInfo{
+    required NormalChallengeInfo base = 1;
+    required uint32 money = 2;
+}
+
+//擂台赛，已废弃
+message NormalChallenges{
+    repeated NormalChallengeInfo challenges = 1;
+}
+
+//擂台赛，已废弃
+message MoneyChallenges{
+    repeated MoneyChallengeInfo challenges = 1;
+}
+
+//擂台赛，已废弃
+message GetNormalChallengeList{
+}
+
+//擂台赛，已废弃
+message GetMoneylChallengeList{
+}
+
+//擂台赛，已废弃
+message BeginNormalChallenge{
+	required uint32 level = 1;
+	required uint32 index = 2;
+}
+
+//擂台赛，已废弃
+message BeginMoneyChallenge{
+	required uint32 level = 1;
+	required uint32 index = 2;
+}
+
+//擂台赛，已废弃
+message PlayerChallengeInfo{
+	required uint32 score = 1;
+	required uint32 salarytime = 2;
+}
+
+//赠送体力
+message PlayerGiveGift{
+	required string uid = 1;
+}
+
+//新手指引～
+message GuideFinishedStep{
+	required uint32 stepId = 1;
+}
+
+//QQ分享
+message QQShare {
+    repeated string uids = 1;
+    optional string image_url = 2;
+    optional string summary = 3;
+    optional string target_url = 4;
+    optional string title = 5;
+    optional string previewText = 6;
+    optional string game_tag = 7;
+}
+//玩家体力信息
+message TiLiInfo{
+    required uint32 tiliNum = 1;	//玩家的体力数
+    required int64 tiliStartTime = 2;	//玩家的体力自动刷新时间
+}
+
+message BuildingSpeedUp {                           //好友加速请求（上行）
+    required BuildingId id = 1;                         //建筑id
+}
+
+message BuildSpeedUpInfo {                          //好友加速信息（下发）
+    required BuildingId id = 1;                         //建筑id
+    required uint32 level = 2;                          //建筑等级
+    required uint32 time = 3;                           //请求时间
+    required uint32 validtime = 4;                      //过期时间
+    optional string helper = 5;                         //帮助者
+}
+
+message BuildReleaseTimeInfo {                      //好友减时信息（下发）
+    required BuildingId id = 1;                         //建筑id
+    required uint32 level = 2;                          //建筑等级
+    required uint32 time = 3;                           //请求时间
+    required uint32 validtime = 4;                      //过期时间
+}
+
+message PlayerFriendBuildInfo {                     //玩家加速减时信息（下发）
+    repeated BuildSpeedUpInfo speedup_info = 1;         //加速信息
+    repeated BuildReleaseTimeInfo releasetime_info = 2; //减时信息
+}
+
+message ViewPlayerFriendBuildInfo {                 //访问好友加速减时信息（下发）
+    required string uid = 1;                            //好友uid
+    required PlayerFriendBuildInfo info = 2;            //求助信息
+}
+
+message FriendRequestHelp {                         //好友求助信息推送（下发）
+    enum HelpType {                                     //求助类型
+        None = 0;                                           //无
+        SpeedUp = 1;                                        //加速
+        ReleaseTime = 2;                                    //减时
+    }
+    required string uid = 1;                            //好友uid
+    required HelpType type = 2;                         //帮助类型
+    required bool help = 3;                             //是否需要帮助
+    optional uint32 validtime = 4;                      //过期时间
+}
+
+message RequestHelpFriend {                         //请求帮助好友（上行）
+    required string uid = 1;                            //好友uid
+    required BuildingId id = 2;                         //建筑id
+}
+
+message UpdateBuildingBoostTime {                   //刷新建筑加速信息（下发）
+    required BuildingId id = 1;                         //建筑id
+    required BoostTime bt = 2;                          //加速信息
+}
+
+message UpdateBuildingBoostTimes {                  //刷新建筑加速信息,批量（下发）
+    repeated UpdateBuildingBoostTime buildings = 1;     //建筑id
+}
+
+//益友工坊刷新 下发
+message FriendHouseReflesh {
+    optional bool reflesh = 1; //是否刷新
+    optional string random_reward = 2; //下次随机奖励
+    optional uint32 last_time = 3; //上次领取奖励时间
+}
+
+message UpdateBuildingReleaseTimes {                //刷新建筑减时信息，批量（下发）
+    repeated BuildingId buildings = 1;                  //建筑id
+}
+
+message ChangeSceneHideUI {                         //转场景显示ui界面（下发）
+        enum MsgType {                                  //用途
+             None = 0;
+             HelpFriend = 1;                                //帮助好友
+             AttackFriend = 2;                              //好友进攻
+        }
+    required string uid = 1;                            //好友uid
+    optional MsgType type = 2 [default = None];         //类型
+}
+
+//server -> cleint 下发随机技能
+message AddRandomSkill{						//随机技能，武将升级下发客户端
+	optional uint32 ghindex = 1;				//武将所在建筑索引（无用）
+	optional uint32	heroindex = 2;				//武将索引
+	repeated uint32 randomskill =  3;			//随机协议
+}
+
+message Collect {                                   //采集资源（上传）
+    required BuildingId id = 1;                         //建筑iid
+    optional uint32 glodold = 2;                        //采集前银两
+    optional uint32 glodnow = 3;                        //当前银两
+    optional uint32 foodold = 4;                        //采集前粮草
+    optional uint32 foodnow = 5;                        //当前粮草
+}
+
+message SafetyReport {
+    required bytes safety_data = 1;
+}
+
+//获取捐兵数量
+message GetMyDonateNum {
+    optional uint32 count = 1; //捐兵数量
+
+}
+
+//分享战斗的类型
+enum BattleLogType {
+	Defence = 1;
+	Attack = 2;
+    FriendExecise = 3;
+}
+
+//客户端申请服务器分享战斗 
+message ShareBattle {
+	required BattleLogType battletype = 1;		//战斗类型
+	optional uint64 rid = 2;			//replay id
+    	required string strShareMes = 3;		//分享时带的信息
+}
+
+//gs -> fs -> client  & save  好友分享战斗
+message FriendShareBattle {
+	required		string SourceName = 1;		//分享的好友名字
+	optional 		string headurl = 2;		//分享的好友头像url
+	required 	BattleLogType battletype = 3;		//战斗类型
+	required		string	 Uid = 4;		//玩家uid
+	required 	BattleLog bl = 5;			//战斗记录
+	optional 	string	StrShareMes= 6;			//分享时带的信息
+}
+
+//一个好友的所有战斗分享 & save  server－>client 
+message ShareBattleOnePlayer {
+	repeated FriendShareBattle sharebattleoneplayer = 1;	//战斗分享
+}
+
+//所有好友的战斗分享
+message ShareBattleAll {
+	repeated ShareBattleOnePlayer allsharebattle = 1;	//一个好友战斗分享
+}
+//服务器下发好友天天闯关分数，做好友排行榜
+message LetServerAddInfo {
+    
+}
+
+//尝试获取联盟兵力协议
+message TryGetClanArmy {
+    optional string name = 1;联盟名字
+}
+//好友援军请求协议
+message FriendDonateMsg {
+    optional string Msg = 1;//请求人所说的文字信息
+}
+
+//请求援军对象刷新信息
+message S2SFriendDonateMsg {
+    optional string uid = 1;//请求人UID
+    optional uint32 usedspace = 2;//请求人兵站使用空间
+    optional uint32 allspace = 3;//请求人兵站总共空间
+    optional string Msg = 4;//请求人的求援文字
+    optional uint32 time = 5;//求援时间
+    optional string name = 6;//名字
+    optional uint32 donateTimes = 7;//捐兵对象捐兵次数
+}
+
+//玩家好友捐兵协议
+message C2SDonateToFriend{
+	required string from_uid = 1;//捐兵人UID
+	optional Character characters = 2;//兵种信息
+	required string to_uid = 3;//捐给对象UID
+	optional string from_name = 4;//捐兵人名字
+}
+
+//玩家发起的建筑加速请求信息 记录在系统好友信息里边
+message PlayerNeedHelpBuilding {
+        optional BuildingId id = 1; //请求建筑ID
+        optional uint32 must_help_time = 2; //请求过期时间
+}
+
+//服务器下发系统好友信息(小郡主)
+message SystemFriendInfo {
+        optional string name = 1; //系统好友名字
+        optional string uid = 2; //系统好友UID
+        optional uint32 level = 3; //系统好友等级
+        optional uint32 exp = 4; //系统好友经验
+        optional VisitEvent visit_event = 5; //系统好友事件记录
+        optional uint32 reflash_village_time = 6; //刷新村庄时间
+        optional uint32 send_friendrequest_time = 7; //发送好友请求时间
+        repeated PlayerNeedHelpBuilding help_cd = 8; //帮助玩家求助cd
+        optional uint32 village_id = 9; //村庄ID
+        optional bool finish_request_task = 10 [default = false]; //完成好友求助任务
+        optional uint32 last_request_time = 11; //上次发起好友请求时间
+        optional PlayerFriendBuildInfo request_buildings = 12; //玩家发起加速建筑请求信息
+        optional bool finish_init = 13 [default = false]; //是否完成系统好友初始化
+}
+//客户端上传新玩法解锁界面弹出状态更新
+message UpdataLastCenterLevel {
+    
+}
+
+//兵种结构
+message CharactersStruct {
+    repeated Character characters = 1; //兵种信息
+
+}
+
+//玩家给联盟的捐兵显示协议（兵池信息）
+message ClanDonateInfoResult {
+    repeated ClanDonateInfo result = 1; //捐兵信息
+    optional uint32 Symbol = 2; //联盟旗帜
+}
+
+//好友援军请求
+message FriendDonateReq {
+    optional string uid = 1; //申请人UID
+    optional uint32 usedspace = 2;//剩余空间
+    optional uint32 totalspace = 3;//总共空间
+    optional string Msg = 4;//求援文字信息
+    optional string name = 5;//名字
+    optional uint32 time = 6;//时间
+    repeated FriendDonateToMe friendDonateInfo = 7; //好友捐给申请人的信息
+    repeated DonateToFriendTimes donateTimes = 8;//好友捐兵给申请人的次数记录
+}
+
+//好友捐兵给申请人的协议
+message FriendDonateToMe {
+    optional string friendUid = 1; //捐兵人UID
+    optional string friendName = 2; //捐兵人名字
+    repeated Character characters = 3;//兵种信息
+}
+
+//好友求援CD
+message FriendDonateCDTime {
+    optional uint32 time = 1;//时间
+}
+
+//服务器下发登录已经完成
+message ServerLoginEnd {
+    
+}
+
+//捐兵人捐兵次数记录协议
+message DonateToFriendTimes {
+    optional string uid = 1;//捐兵人UID
+    optional uint32 times = 2;//捐兵次数
+}
+
+//玩家领取新手前三天奖励协议
+message PlayerGetNewPlayerAward {
+   optional uint32 whichDay = 1; //玩家领的哪一天的
+}
+
+//好友掠夺具体信息
+message FriendAttackInfo {
+        optional string uid = 1; //掠夺玩家的uid
+        optional string uid_url = 2; //头像url
+        optional uint32 attack_time = 3; //掠夺时间
+        optional uint32 star_num = 4; //掠夺结果星数
+        optional uint32 lost_gold = 5; //失去银两
+        optional uint32 lost_food = 6; //粮食
+        optional uint32 lost_wuhun = 7; //紫金
+        optional uint64 rid = 8; //下面是战斗记录用于被打好友插入防御记录
+        optional BattleLog blog = 9; //战斗记录
+        optional BattleReplay replay = 10; //战斗回放记录
+}
+
+//好友服务器和用户信息里面保存聚宝盆信息
+message JuBaoPenInfo {
+        optional bool can_attack = 1 [default = true]; //是否可以好友掠夺
+        optional uint32 gold = 2; //可掠夺银两
+        optional uint32 food = 3; //可掠夺粮食
+        optional uint32 wuhun = 4; //可掠夺紫金
+        optional string uid = 5; //攻打玩家的UID
+        optional uint32 last_time = 6; //上次被掠夺时间
+        repeated FriendAttackInfo attack_info = 7; //被掠夺记录
+        optional string name = 8; //这以下包裹上面的uid是记录攻打的好友的信息用于插入进攻记录
+        optional uint32 level = 9; //玩家等级
+        optional string clan_name = 10; //玩家联盟名字
+        optional uint32 clan_symbol = 11; //联盟标志
+        optional uint32 trophy = 12; //杯数
+}
+
+message RobotMoney {					//机器人加钱协议（机器人使用）
+	optional uint32 type = 1;			//资源建筑类型
+	optional uint32 id = 2;				//建筑索引
+	optional uint32 num = 3;			//数量
+}
+
+enum OperateHeroMethod {				//操作武将的方法枚举
+	ByInvalide 	= 0;
+	BySearch 	= 1;				//搜索
+	ByCompose 	= 2;				//碎片组成
+	ByGive 		= 3;				//预留
+	ByEmail		= 4;				//邮件
+	ByLottery   	= 5;				//抽奖
+	Count		= 6;
+}
+
+enum ChangeHeroState {					//武将状态改变枚举
+	StateInvalid 	= 0;
+	StateRest 		= 1;			//休息
+	StateDie 		= 2;			//死亡
+	StateUpgrade 	= 3;				//升级
+	StateCount 		= 4;
+
+}
+
+message OperateHero {					//客户端操作武将协议（添加、替换、删除）
+	optional uint32 index = 1;			//武将索引
+	optional OperateHeroMethod way = 2;		//方法
+}
+
+message ChangeStateHero {				//改变武将状态协议
+	optional uint32 index = 1;			//武将索引
+	optional ChangeHeroState way = 2;		//进入的状态
+}
+
+message SuperLeaguePlayer {                         //联赛玩家信息（下发）
+    optional string uid = 1;                            //玩家uid
+    optional string name = 2;                           //玩家名字
+    optional uint32 trophy = 3;                         //玩家旗帜数
+    optional string clan_name = 4;                      //联盟名
+    optional uint32 clan_symbol = 5;                    //联盟旗帜
+    optional uint32 superleagueattack = 6;              //进攻成功次数
+    optional uint32 superleaguedefend = 7;              //防守成功次数
+}
+
+message SuperLeagueGroupInfo {                      //联赛段玩家信息（下发）
+    optional uint32 overduetime = 1;                    //过期时间
+    repeated SuperLeaguePlayer players = 2;             //玩家
+}
+
+message SuperLeagueRankInfo {                       //联赛自己排名（下发）
+    required uint32 rank = 1;                           //排名
+}
+
+enum InvalidNum {
+	TypeInt = 65535;
+}
+
+//刷新冲级任务
+message FlushPlayerLevelUpTaskData {
+	optional string name = 1;
+}
+
+//服务器下发系统公告
+message SystemNotice {
+        enum Platform {
+             All = 1;
+             IOS = 2;
+             Andriod = 3;
+        }
+        enum Server {
+             Both = 1;
+             WeChat = 2;
+             QQ = 3;
+        }
+        enum Priority {
+             High = 1;
+             Mid = 2;
+             Low = 3;
+        }
+        optional bool can_show = 1 [default = false]; //是否显示
+        optional string title = 2; //公告标题
+        optional string content = 3; //公告内容
+        optional uint32 begin_time = 4; //公告有效期开始时间
+        optional uint32 end_time = 5; //有效期结束时间
+        optional Platform platform = 6 [default = All]; //显示公告的平台
+        optional Server server = 7 [default = Both]; //显示公告的服务器
+        optional Priority pri = 8 [default = High]; //公告优先级
+}
+
+message SuperLeagueOverdueTime {                    //联赛过期时间
+    required uint32 overduetime = 1;                    //过期时间
+
+}
+
+//---------------- 活动参数 ---------------------
+// 活动参数没有特别说明都是服务器使用的数据结构
+enum AcEventType {
+     AC_EV_None = 0;
+     AC_EV_Login = 1; //登录
+     AC_EV_FirstRecharge = 2; //首充
+     AC_EV_Cost = 3; //花费宝石
+     AC_EV_Levelup = 4;   //冲级
+     AC_EV_PVP = 5; //pvp战斗
+     AC_EV_TTT = 6; //TTT战斗
+     AC_EV_Getback = 7;  //内测充值(纯显示)
+     AC_EV_Share = 8; //分享
+     AC_EV_Discount = 9; //资源打折
+     AC_EV_FinishNow = 10; //秒建筑
+	 AC_EV_FriendNum = 11;
+	
+     AC_EV_End = 12;
+}
+
+message ACInfo_Header{
+    required uint32 id = 1;
+    required ActivityType activitytype = 2;
+    required uint32 version = 3;
+    required bool   openflag = 4;
+    required bool   cleanrecord = 5;
+    required uint32 start_time = 6;
+	required uint32 end_time = 7;
+    optional uint32  rewardlevel = 8;
+    optional uint32  closestarttime = 9;
+    optional uint32  closeendtime = 10;
+    optional uint32  StartHour = 11;        //活动每天开放的开始小时 0 －24
+    optional uint32  EneHour = 12;          //活动每天开放的结束小时 0 －24
+    optional uint32 MaxNB = 13;
+    repeated bool WeekDay = 14;           //周开放日，0-6下标。
+}
+
+//-------分享
+message ACInfo_Share_item{
+    required uint32 need_times = 1;
+	optional string awardtype1 = 2;
+	optional uint32 awardcount1 = 3;
+	optional string awardtype2 = 4;
+	optional uint32 awardcount2 = 5;
+	optional string awardtype3 = 6;
+	optional uint32 awardcount3 = 7;
+	optional string awardtype4 = 8;
+	optional uint32 awardcount4 = 9;
+}
+
+message ACInfo_Share{
+    required ACInfo_Header acheader = 1;
+    repeated ACInfo_Share_item ai_share = 2;
+    required uint32     curtimes = 3;       //当前share记录数据
+}
+
+//限时返利
+message ACInfo_Rebate_item{
+    required uint32 need_cost = 1; //需要花费的数量
+	optional string awardtype1 = 2;//奖励类型
+	optional uint32 awardcount1 = 3;//奖励数量（下同）
+	optional string awardtype2 = 4;
+	optional uint32 awardcount2 = 5;
+	optional string awardtype3 = 6;
+	optional uint32 awardcount3 = 7;
+	optional string awardtype4 = 8;
+	optional uint32 awardcount4 = 9;
+}
+
+//限时返利
+message ACInfo_Rebate{
+    required ACInfo_Header acheader = 1; //公用头
+    repeated ACInfo_Rebate_item ai_rebate = 2;//具体奖励信息
+    repeated RebateInfo info = 3;       //当前rebate记录数据
+}
+
+//限时返利
+message RebateInfo {
+   optional uint32 Cost = 1;//当前花费
+   optional bool   IsTaken = 2;//是否已领取
+   optional uint32 time = 3;//时间
+}
+
+//累计签到
+message ACInfo_AccDay_item{
+    required uint32 need_times = 1;
+	optional string awardtype1 = 2;
+	optional uint32 awardcount1 = 3;
+	optional string awardtype2 = 4;
+	optional uint32 awardcount2 = 5;
+	optional string awardtype3 = 6;
+	optional uint32 awardcount3 = 7;
+	optional string awardtype4 = 8;
+	optional uint32 awardcount4 = 9;
+}
+
+message ACInfo_AccDay{
+    required ACInfo_Header acheader = 1;
+    repeated ACInfo_AccDay_item ai_accday = 2;
+    required uint32     curtimes = 3;       //当前累计登录次数
+}
+
+//天天闯关
+message ACInfo_3TEachDay_item{
+    required uint32 need_times = 1;
+	optional string awardtype1 = 2;
+	optional uint32 awardcount1 = 3;
+	optional string awardtype2 = 4;
+	optional uint32 awardcount2 = 5;
+	optional string awardtype3 = 6;
+	optional uint32 awardcount3 = 7;
+	optional string awardtype4 = 8;
+	optional uint32 awardcount4 = 9;
+}
+
+message ACInfo_3TEachDay{
+    required ACInfo_Header acheader = 1;
+    repeated ACInfo_3TEachDay_item ai_3teachday = 2;
+	repeated uint32 	topreward = 3;		 //以前的所有得到的奖励
+    required uint32    curtimes = 4;       //当前累计登录次数
+    required uint32    curday  = 5;        //当前记录的日期,防止跨天
+}
+
+message ACInfo_Show{
+	required ACInfo_Header acheader = 1;
+}
+
+message ACInfo_Levelup_Item{
+	required uint32	type = 1;
+	required uint32 level = 2;
+	optional string awardtype1 = 3;
+	optional uint32 awardcount1 = 4;
+	optional string awardtype2 = 5;
+	optional uint32 awardcount2 = 6;
+	optional string awardtype3 = 7;
+	optional uint32 awardcount3 = 8;
+	optional string awardtype4 = 9;
+	optional uint32 awardcount4 = 10;
+}
+
+message ACInfo_Levelup {
+	required ACInfo_Header  acheader = 1;
+	repeated ACInfo_Levelup_Item levelupItem = 2;
+	repeated uint32		finishID = 3;
+}
+
+//建筑加速送宝石活动
+message ACInfo_FinishNow_Item {
+        optional string awardtype1 = 1;
+        optional uint32 awardcount1 = 2;
+}
+//建筑加速送宝石活动下发协议
+message ACInfo_FinishNow {
+        required ACInfo_Header acheader = 1; //活动通用
+        repeated ACInfo_FinishNow_Item ai_finishnow = 2; //活动奖励
+        optional uint32 curtimes = 3;   //当前秒建筑次数
+        optional uint32 lasttime = 4;   //上次秒建筑时间
+}
+
+//PVP活动
+message ACInfo_PVP_Item {
+        optional uint32 Percentage = 1;
+}
+//PVP活动下发协议
+message ACInfo_PVP {
+        required ACInfo_Header acheader = 1; //活动通用数据
+        optional ACInfo_PVP_Item ai_pvp = 2; //活动加成数据
+}
+
+message ACInfo_RechargeItem {
+	required uint32	rechargeNum = 1;
+	optional string awardtype1 = 2;
+	optional uint32 awardcount1 = 3;
+	optional string awardtype2 = 4;
+	optional uint32 awardcount2 = 5;
+	optional string awardtype3 = 6;
+	optional uint32 awardcount3 = 7;
+	optional string awardtype4 = 8;
+	optional uint32 awardcount4 = 9;
+}
+
+message ACInfo_Recharge {
+	required ACInfo_Header acheader = 1;
+	repeated ACInfo_RechargeItem rechargeItem = 2;
+	optional uint32 curRecharge = 3;
+}
+
+message ACInfo_Rank {
+    required ACInfo_Header acheader = 1;
+    optional int32 rank = 2;
+    optional bool  cangain = 3;
+    optional bool  open = 4;
+    optional bool  bIsGeted = 5;
+}
+
+message ACInfo_RechargeRet {
+	required ACInfo_Header acheader = 1;
+	optional uint32 count = 2;
+}
+
+message RefreshActivity {
+    required uint32 id = 1;
+}
+
+message Activity_Reward {
+	required string type = 1;
+	required uint32 number = 2;
+}
+
+message ACInfo_Friend {
+	required ACInfo_Header acheader = 1;
+	optional bool hasreward = 2;
+}
+
+message ACInfo_Times {
+    required ACInfo_Header acheader = 1;
+    optional uint32 time = 2;
+    optional uint32 times = 3;
+    optional uint32 refreshtime = 4;
+    optional uint32 cfgtime = 5;
+}
+
+message ACInfo_Barrier {
+    required ACInfo_Header acheader = 1;
+}
+
+//周卡
+message ACInfo_RechargeWeek {
+        required ACInfo_Header acheader = 1;
+        optional uint32 need_day = 2; //还可以返利天数
+        optional uint32 today_gem = 3; // 一天返利宝石数量
+        optional bool have_recharge = 4 [default = false]; //是否领取奖励
+}
+//月卡
+message ACInfo_RechargeMonth {
+        required ACInfo_Header acheader = 1;
+        optional uint32 need_day = 2; //还可以返利天数
+        optional uint32 today_gem = 3; // 一天返利宝石数量
+        optional bool have_recharge = 4 [default = false]; //是否领取奖励
+}
+
+//-------活动记录，存盘用
+message PARecord_OneActivity{
+    required uint32 id = 1;
+    required ActivityType type = 2;
+    required uint32 version = 3;
+    optional string acbuffer = 4;   //指向展开的具体活动记录buffer,该结构体和内存中保存的活动进度使用相同结构体
+    optional uint32 rewardlevel = 5;
+}
+
+message PARecord_AllActivity{
+	repeated PARecord_OneActivity  allact = 1;
+}
+
+message SyncSuperLeagueSeg {
+    optional uint32 seg = 1;
+    optional uint32 overduetime = 2;
+}
+
+message PlayerGetActAward{
+    required uint32 ActId = 1;
+	optional uint32	tid = 2;
+}
+
+message Share2Tencent{
+}
+
+//活动类型枚举
+enum ActivityType {
+	AT_AccDayLogin = 0;
+	AT_WeekLogin = 1;
+	AT_ScLogin = 2;
+	AT_Exercise = 3;
+	AT_Share = 4;
+	AT_3TEachDay = 5;
+	AT_OnlyShow = 6;
+	AT_LevelUp = 7;
+   	AT_FinishNow = 8;
+	AT_Recharge = 9;
+	AT_Rebate = 10;
+    AT_PVP = 11;
+    AT_Rank = 12;
+    AT_RechargeRet = 13;
+	AT_Friend = 14;
+    AT_DayTimes = 15;
+    AT_Barrier = 16;
+    AT_RechargeWeek = 17;
+    AT_RechargeMonth = 18;
+}
+//---------------- 活动参数 End---------------------
+
+message RobotVillage {						//机器人初始化村庄协议
+	required uint32 index = 1;				//村庄索引
+}
+
+message ServerOpenHero {					//服务器动态开放武将协议
+	repeated uint32 serverHero = 1;				//开放的武将队列
+	repeated uint32 heroLevel = 2;				//武将等级
+}
+
+//服务器下发好友掠夺可以掠夺的资源
+message FriendAttackRes {
+        optional uint32 gold = 1; //银两
+        optional uint32 food = 2; //粮食
+        optional uint32 wuhun = 3; //紫金
+}
+
+//每个pvp宝箱的具体信息
+message PVPBoxItem {
+        optional string uid = 1; // 攻打玩家uid
+        optional string name = 2; //攻打玩家名字
+        optional string headurl = 3; //攻打玩家头像url
+        optional uint32 attack_time = 4; //攻打时间
+}
+
+//服务器下发用户的PVP宝箱信息
+message PVPBoxInfo {
+        optional uint32 open_times = 1; //当前开启宝箱次数
+        optional uint32 last_time = 2; //上次开启宝箱时间
+        repeated PVPBoxItem items = 3; //宝箱信息
+}
+
+//服务器下发PVP宝箱数量达到最大提示
+message MaxPVPBoxNum {
+
+}
+
+message LotteryHero {						//武将抽奖协议
+	optional uint32 times = 1;				//抽奖次数
+}
+
+message LotteryResult {						//武将抽奖结果返回
+	enum Type {						//结果类型
+		InvalidType = 0;
+		Food = 1;					//粮食
+		Gold = 2;					//银两
+		Wuhun = 3;					//紫金
+		Army = 4;					//小兵
+		Hero = 5;					//武将
+		HeroPiece = 6;					//武将碎片
+		Tili = 7;					//体力
+		
+		TypeCount = 7;
+	}
+	repeated Type type = 1;					//类型集
+	repeated string name = 2;				//名称集
+	repeated uint32 count = 3;				//数量集
+	optional uint32 freeTimes = 4;				//免费次数
+	optional uint32 lastTime = 5;				//上次抽取时间
+}
+
+message DynamicSwitch {                             //动态开关（下发）
+    enum Type {                                         //类型（枚举）
+        Hero = 1;                                           //英雄开关
+        DarkBarrack = 2;                                    //紫金兵营
+        Rebel = 3;                                          //黄巾反叛
+        Pve = 4;                                            //pve
+    }
+
+    required Type type = 1;                             //类型
+    required uint32 value = 2;                          //数值
+}
+
+message DynamicSwitchs {                            //动态开关（下发）
+    repeated DynamicSwitch switchs = 1;                 //所有开关
+}
+//客户端上传获取PVE某一关可以获得的英雄碎片信息
+message GetPVEHeroPice {
+    required uint32 staged = 1;      //关卡ID
+    required uint32 difficult = 2;	 //关卡难度
+}
+//服务器下发本关P可以获得的英雄碎片信息
+message SendPVEHeroPice {
+    repeated  PVEHeroPieceInfo  phpieceinfo= 1; //本关可以获取的所有英雄碎片信息
+}
+//PVE可获取的英雄碎片的具体数据
+message PVEHeroPieceInfo {
+    required string heroname = 1;	 //英雄的名字
+    required uint32 quanzhong = 2; //英雄的全中概率
+}
+
+//开PVP宝箱  调用: CNServer.OpenPVPBox
+message TryOpenPVPBox {
+        optional uint32 attack_time = 1; //宝箱产生时间
+        optional uint32 index = 2; //宝箱索引
+}
+//当得到从QQ返回购买宝石信息时，向客户端发送信息，以完成成就
+message MsgBuyGem {
+    required uint32 num = 1;	//宝石数量
+}

@@ -1,0 +1,26 @@
+## make file 各种基本定义
+
+BUILD_FLAG=Debug
+#BUILD_FLAG=Release
+
+BUILD_JOBS=-j5
+
+#CC=g++ -ggdb -pipe -rdynamic -w
+CC=g++ -ggdb -m32 -pipe -rdynamic -w -g
+GCC=gcc -m32 -O2 -pipe -rdynamic -w -g
+MODULE=-c
+
+SHARED_LIB=-fpic -shared -o
+
+GO=/usr/local/go/bin/go
+
+OUTPUT_DIR=bin/
+
+##BUILD_SYSTEM=-D__linux__
+
+ifeq ($(BUILD_SYSTEM),-D__linux__)
+DEPEND_LIB_COMMON=-lpthread -lrt -ldl
+APP=-Wl,-rpath,. -Wl,--export-dynamic -o
+else
+APP=-Wl,-rpath,. -Wl -o
+endif

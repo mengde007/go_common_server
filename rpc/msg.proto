@@ -1,0 +1,143 @@
+package rpc;
+
+message PlayerBaseInfo{
+    required string uid = 1;
+    required string name = 2;
+    required int32 level = 3;
+}
+
+message PlayerExtraInfo {
+    optional int32 exp = 1;
+    optional int32 diamonds = 2;
+    optional int32 onLineTime = 3; 
+}
+
+message Request{
+	required string method = 1;
+	optional bytes serialized_request = 2;
+}
+
+message LoginCnsInfo{
+	required string cnsIp = 1;
+	required string gsInfo = 2;
+    optional int32 versionOld = 3;
+    optional int32 versionNew = 4;
+    optional string downloadUrl = 5;
+    optional int32 versionMid = 6;
+}
+
+message Login{
+	optional string uid = 1;
+	optional string gatekey = 2;
+    optional int32 platformType = 3;
+    optional string openid = 4;
+	optional string openkey = 5;
+	optional string pay_token = 6;
+	optional string pf = 7;
+	optional string pfkey = 8;
+    optional string clientversion = 9;
+    optional string hardwareinfo = 10;
+    optional string networktype = 11;
+    optional string serviceprovidername = 12;
+    optional int32 registerchannel = 13;
+    optional int32 loginchannel = 14;
+    optional int32 versionCode = 15;
+    optional string bindguestuid = 16;
+    optional string userId = 17;
+    optional string vToken = 18;
+}
+
+message LoginResult{
+  required string result = 1 ;
+  required int32 server_time = 2;
+  optional string errmsg = 3;
+  optional string openid = 4;
+  optional string uid  = 5;
+}
+
+message PlayerInfo{
+    required PlayerBaseInfo base = 1;
+    required PlayerExtraInfo extra = 2;
+}
+
+
+//---------------------------------------------------- old
+
+message FormatedMsg {
+    required string code = 1;
+    repeated MsgArg args = 2;
+}
+
+
+message Msg{
+    optional string code = 1;
+    optional string text = 2;
+}
+
+message NumberMsg{
+    optional int32 value = 1;
+}
+
+message MsgArg {
+    optional string s = 1;
+    optional int32 i = 2;
+}
+
+message GuestBindOk {
+    optional bool success = 1;
+}
+
+message Ping{
+	optional int64 ClientTime = 1;
+}
+
+message PingResult{
+	required int32 server_time = 1;
+}
+
+
+// 长时间在线强制离线
+message KickPlayerMsg {
+        optional int32 time = 1;
+}
+
+message C2SChatP2P
+{
+	required string ToPlayerId = 1;
+	required string ChatContent = 2;
+}
+
+message C2SChatAlliance
+{
+	required string ChatContent = 1;
+	optional bool useIM = 2;
+    optional string voiceTime = 3;//语音时长
+}
+
+message C2SChatWorld
+{
+	required string ChatContent = 1;
+	optional bool   useIM = 2;
+    optional string voiceTime = 3;//语音时长
+}
+
+message S2CChatP2P
+{
+	required string FromPlayerId = 1;
+	required string FromPlayerName = 2;
+	required int32 FromPlayerLevel = 3;
+	required string ChatContent = 4;
+}
+
+message S2CChatWorld
+{
+    required string FromPlayerId = 1;
+    required string FromPlayerName = 2;
+    required int32 FromPlayerLevel = 3;
+	required int64 ChatTime = 6;
+    required string ChatContent = 7;
+   optional bool useIM = 10;
+   optional string voiceTime = 11;//语音时长
+   optional int32 messageId = 12;//消息id，客户端某些情况需要这个东西
+}
+

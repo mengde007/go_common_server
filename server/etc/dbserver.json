@@ -1,0 +1,58 @@
+{
+    "database": {
+      "main": [
+        {
+          "host": "127.0.0.1",
+          "port": 3306,
+          "uname": "root",
+          "pass": "ppedbs",
+          "dbname": "dbtest1",
+          "charset": "utf8",
+          "pool": 16
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 3306,
+          "uname": "root",
+          "pass": "ppedbs",
+          "dbname": "dbtest2",
+          "charset": "utf8",
+          "pool": 16
+        }
+      ]
+    },
+    "cache": {
+      "main": [
+        {
+          "host": "127.0.0.1",
+          "port": 6379,
+          "index": 0,
+          "pool": 100
+        },
+        {
+          "host": "127.0.0.1",
+          "port": 6379,
+          "index": 1,
+          "pool": 100
+        }
+      ]
+    },
+    "tables": {
+      "player": {
+        "db-profile": "main",
+        "cache-profile": "main",
+        "expiry" : 0
+      },
+      "club": {
+        "db-profile": "main",
+        "cache-profile": "main",
+        "expiry" : 0
+      },
+      
+      "village": {
+        "db-profile": "main",
+        "cache-profile": "main",
+        "expiry" : 0
+      }
+    }
+  }

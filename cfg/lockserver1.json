@@ -1,0 +1,45 @@
+{
+	"comment1" : "加锁服务器配置",
+	"LockHost" : "127.0.0.1:8700",
+	"DebugHost" : "127.0.0.1:5700",
+	"CpuProfile" : false,
+	"GcTime" : 120,
+	"cache" : {
+		"main" : [
+		{
+			"host" : "127.0.0.1",
+			"index" : 0,
+			"pool" : 10,
+			"port" : 6379,
+			"vnode" : 3,
+			"nodename": 0
+		},
+		{
+	       "host" : "127.0.0.1",
+	       "index" : 1,
+	       "pool" : 10,
+	       "port" : 6379,
+		   "vnode" : 3,
+           "nodename": 1466611530
+		},
+		{
+	       "host" : "127.0.0.1",
+	       "index" : 2,
+	       "pool" : 10,
+	       "port" : 6379,
+		   "vnode" : 3,
+           "nodename": 2866611530
+		}
+	   ]
+	 },
+	"tables" : {
+		"lockplayer" : {
+			"cache-profile" : "main",
+			"expiry" : 0
+			},
+		"lockdonate" : {
+			"cache-profile" : "main",
+			"expiry" : 0
+			}
+		}
+}

@@ -1,0 +1,14 @@
+{	
+	"comment2"   : "mail的内网ip地址:8894",
+	"Host" : "127.0.0.1:8894",
+	"DebugHost" : "127.0.0.1:5894",
+    	"GcTime" : 120,
+	"CpuProfile" : false,
+	
+	"Maincache": {
+		"host": "127.0.0.1",
+		"port": 6379,
+		"index": 0,
+		"pool": 100
+	}
+}

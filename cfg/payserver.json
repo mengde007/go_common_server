@@ -1,0 +1,15 @@
+{
+    "comment1" : "payserver的监听ip地址",
+    "Host" : "106.14.36.155:7777",
+    "InnerHost" : "127.0.0.1:8897",
+    "DebugHost" : "127.0.0.1:5882",
+    "GcTime" : 120,
+    "CpuProfile" : false,
+
+    "Maincache": {
+        "host" : "127.0.0.1",
+        "port" : 6379,
+        "index" : 0,
+        "pool" : 100
+    }
+}

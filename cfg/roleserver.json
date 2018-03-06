@@ -1,0 +1,14 @@
+{   
+    "comment2"   : "daer的内网ip地址:8892",
+    "Host" : "127.0.0.1:8892",
+    "DebugHost" : "127.0.0.1:8992",
+    "GcTime" : 120,
+    "CpuProfile" : false,
+    
+    "Maincache": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "index": 0,
+        "pool": 100
+    }
+}

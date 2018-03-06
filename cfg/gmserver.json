@@ -1,0 +1,18 @@
+{
+    "comment1" : "gmserver的监听ip地址",
+    "Host" : "127.0.0.1:7895",
+    "InnerHost" : "127.0.0.1:8895",
+    "DebugHost" : "127.0.0.1:5880",
+    "GcTime" : 120,
+    "CpuProfile" : false,
+
+    "comment2" : "重要这个一定要配置正确：1表示qq平台，2表示微信平台",
+    "ServerType" : 1,
+
+     "Maincache": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "index": 0,
+        "pool": 10
+    }
+}

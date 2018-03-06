@@ -1,0 +1,56 @@
+{
+  "DBHost" : "127.0.0.1:8800",
+  "DebugHost" : "127.0.0.1:5800",
+  "GcTime" : 120,
+  "CpuProfile" : false,
+  "cache" : {
+    "main" : [
+      {
+        "host" : "127.0.0.1",
+        "index" : 0,
+        "nodename": 0,
+        "pool" : 100,
+        "port" : 6379
+      },
+      {
+        "host" : "127.0.0.1",
+        "index" : 1,
+        "nodename": 2866611530,
+        "pool" : 100,
+        "port" : 6379
+      }
+    ]
+  },
+  "comment1" : "请配置dbserver的内网ip地址:8800",
+  "database" : {
+    "main" : [
+      {
+        "charset" : "utf8",
+        "dbname" : "db_dpsg_base_1",
+        "host" : "127.0.0.1",
+        "nodename": 0,
+        "pass" : "ppedbs",
+        "pool" : 16,
+        "port" : 3306,
+        "uname" : "root"
+      },
+      {
+        "charset" : "utf8",
+        "dbname" : "db_dpsg_base_2",
+        "host" : "127.0.0.1",
+        "nodename": 2866611530,
+        "pass" : "ppedbs",
+        "pool" : 16,
+        "port" : 3306,
+        "uname" : "root"
+      }
+    ]
+  },
+  "tables" : {
+    "t_base_playerbase" : {
+      "cache-profile" : "main",
+      "db-profile" : "main",
+      "expiry" : 0
+    }
+  }
+}

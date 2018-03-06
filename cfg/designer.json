@@ -1,0 +1,12 @@
+{	
+    "Designer":             "../designer",
+    "OpenGm":               1,
+    "OpenGemBuy":           1,
+	"ServerType" : 1,
+	"WeChatPayPreOrder":"https://api.mch.weixin.qq.com/pay/unifiedorder",
+	"Appid": "wxac6228496497182c", 
+	"Mchid": "1422709602",
+	"WeChatQueryUrl":"https://api.mch.weixin.qq.com/pay/orderquery",
+	"CPKey":"LuZhouQiPai2017WeChatPayTap4FunY",
+	"VersionUrl":"http://down.0830qp.cn/res/newgamecardfixhot/LuzhouqipaiVersions_ip_13.json"
+}

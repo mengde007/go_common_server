@@ -1,0 +1,5 @@
+GameType,Desc,Difen,ChangCi,BeiShu,CoinDifenMulti,InitCredit,NameMinLength,NameMaxLength,PwdMinLength,PwdMaxLength,DifenMinLimit,DifenMaxLimit,EnterRoomMinLimit,TimesMinLimit,TimesMaxLimit,IDLength,MaxPeople,WaitTime,RechargeCoinTime,CreateRoomInterval,CreateRoomMinLimit,MinMultipleLimit,MaxMultipleLimit,RakeRate,CoinWaitingReadyTime,CreditsWaitingReadyTime,CoinRoomDissolveTime,CreditsStartDissolveTime,CreditsMiddleDissolveTime,CreateCreditsRoomCardCost
+int,varchar(255),varchar(255),varchar(255),varchar(255),int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,int,varchar(255)
+1,____,200_500_1000,4_8_16,32_64,10,0,3,12,2,6,200,20000,1000,4,16,4,3,120,120,60,1000,1,100,10,20,20,300,3600,300,4_1#8_2#16_3
+2,__,200_500_1000,4_8_16,32_64,10,0,4,12,2,6,200,20000,1000,4,16,4,3,120,120,60,1000,1,100,10,20,20,300,3600,300,4_1#8_2#16_3
+3,__,200_500_1000,4_8_16,32_64,10,0,5,12,2,6,200,20000,1000,4,16,4,3,120,120,60,1000,1,100,10,20,20,300,3600,300,4_1#8_2#16_3

@@ -1,0 +1,20 @@
+{
+  "lockserver":       ["127.0.0.1:8700"],
+  "accountserver":    ["127.0.0.1:8820"],
+  "dbserverbase":     ["127.0.0.1:8800"],
+  "dbserverextern":   ["127.0.0.1:8810"],
+  "centerserver":       ["127.0.0.1:8890"],
+  "centerservergm":     ["127.0.0.1:6890"],
+  "daerserver":         ["127.0.0.1:8698"],
+  "majiangserver":     ["127.0.0.1:8891"],
+  "roleserver":         ["127.0.0.1:8892"],
+  "roomserver":         ["127.0.0.1:8893"],
+  "mailserver":        ["127.0.0.1:8894"],
+  "gmserver":          ["127.0.0.1:8895"],
+  "matchserver":        ["127.0.0.1:8595"],
+  "matchdaerserver":     ["127.0.0.1:8695"],
+  "pockerserver":       ["127.0.0.1:8896"],
+  "payserver":         ["127.0.0.1:8897"],
+  "rankserver":         ["127.0.0.1:8898"]
+  
+}

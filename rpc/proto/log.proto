@@ -1,0 +1,497 @@
+package rpc;
+
+message logPlayerLoginLogout{
+	required string 	playerid = 1;
+	required int64 		time = 2;
+	required bool		logout = 3;
+	required string		ip = 4;
+}
+
+message LogPlayerRegister {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32 LPlatID = 4;
+    required string Lvopenid = 5;
+    required string LClientVersion = 6;
+    required string LSystemHardware = 7;
+    required string LTelecomOper = 8;
+    required string LNetwork = 9;
+    required int32 LRegChannel = 10;
+    optional string LZoneID = 11;
+}
+
+message LogPlayerLogin {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32 LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32 LLevel = 6;
+    required int32 LPlayerFriendsNum = 7;
+    required string LClientVersion = 8;
+    required string LSystemHardware = 9;
+    required string LTelecomOper = 10;
+    required string LNetwork = 11;
+    required int32 LLoginChannel = 12;
+    optional string LZoneID = 13;
+}
+
+message LogPlayerLogout {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32 LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32 LOnlineTime = 6;
+    required int32 LLevel = 7;
+    required int32 LPlayerFriendsNum = 8;
+    required string LClientVersion = 9;
+    required string LSystemHardware = 10;
+    required string LTelecomOper = 11;
+    required string LNetwork = 12;
+    optional string LZoneID = 13;
+}
+
+message LogMoneyFlow {
+    enum ADDORREDUCE {
+        ADD = 0;
+        REDUCE = 1;
+    }
+
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    optional int32  LSequence = 3;
+    required string LvGameAppid = 4;
+    required int32  LPlatID = 5;
+    required string Lvopenid = 6;
+    required int32  LLevel = 7;
+    required int32  LiMoney = 8;
+    required int32  LReason = 9;
+    required ADDORREDUCE LAddOrReduce = 10;
+    required int32  LiMoneyType = 11;
+    required int32  LiCenterLevel = 12;
+    optional string LZoneID = 13;
+}
+
+message LogSnsFlow {
+    enum SNSTYPE {
+        SHOWOFF = 0;
+        INVITE = 1;
+        SENDHEART = 2;
+        RECEIVEHEART = 3;
+        SENDEMAIL = 4;
+        RECEIVEEMAIL = 5;
+        SHARE = 6;
+        SpeedUp = 7;
+        ReleaseTime = 8;
+        SpeedUp_Help = 9;
+        ReleaseTime_Help = 10;
+        OTHER = 11;
+        FriendDonate = 12;
+    }
+
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32 LPlatID = 4;
+    required string LActorOpenID = 5;
+    optional int32 LRecNum = 6;
+    required int32 LCount = 7;
+    required int32 LSNSType = 8;
+    optional int32 LSNSSubType = 9;
+    required int32 LiCenterLevel = 10;
+    optional string LZoneID = 11;
+}
+
+message LogRoundFlow {
+    enum BATTLETYPE {
+        PVE = 0;
+        PVP = 1;
+        TTT = 2;
+        OTHER = 3;
+        FRIENDATTACK = 4;
+    }
+
+    enum PVEBATTLEMODE {
+        NORMAL = 0;
+        HARD = 1;
+        NIGHTMARE = 2;
+        BETRAY = 3;
+    }
+
+    enum PVEAUTOMODE {
+        PVEAMNORMAL = 0;
+        PVEAMAUTO = 1;
+    }
+
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32 LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32 LBattleID = 6;
+    required int32 LBattleType = 7;
+    required int32 LPVEBattleMode = 8;
+    required int32 LRoundScore = 9;
+    required int32 LRoundTime = 10;
+    required int32 LResult = 11;
+    required int32 LGold = 12;
+    required int32 LFood = 13;
+    required int32 LWuhun = 14;
+    required int32 LPercent = 15;
+    required int32 LiPVEAUTOMODE = 16;
+    required int32 LiECHARTYPE = 17;
+    required int32 LiECHARTYPEFrag = 18;
+    required int32 LiECHARTYPEFragNum = 19;
+    required string LvDstId = 20;
+    optional string LZoneID = 21;
+}
+
+message LogBuildingUpgradeFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LLevel = 6;
+    required int32  LBUILDINGTYPE = 7;
+    required int32  LiId = 8;
+    required int32  LiLevel = 9;
+    optional string LZoneID = 10;
+}
+
+message LogTaskFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LLevel = 6;
+    required int32  LiTaskType = 7;
+    required int32  LiId = 8;
+    optional string LZoneID = 9;
+}
+
+message LogTrainingFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  Lchartype = 6;
+    required int32  Lcharlevel = 7;
+    optional string LZoneID = 8;
+}
+
+message LogUpdateCharFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  Lchartype = 6;
+    required int32  Lcharlevel = 7;
+    optional string LZoneID = 8;
+}
+
+message LogSelfBattleFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  Lcenterlevel = 6;
+    optional string LZoneID = 7;
+}
+
+message LogHeroFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  Lchartype = 6;
+    required int32  LAddOrReduce = 7;
+    required int32  LGainReason = 8;
+    required int32  LiCenterLevel = 9;
+    required int32  LiLevel = 10;
+    optional string LZoneID = 11;
+}
+
+message LogHeroUpdateFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  Lchartype = 6;
+    required int32  LLevel = 7;
+    required int32  LiCenterLevel = 8;
+    optional string LZoneID = 9;
+}
+
+message LogClanFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LCreateOrDel = 6;
+    required string LClanName = 7;
+    required string LTargetId = 8;
+    optional string LZoneID = 9;
+}
+
+message LogClanDonateFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required string LClanName = 6;
+    required int32  LCharType = 7;
+    required int32  LCharLevel = 8;
+    required int32  LiCenterLevel = 9;
+    optional string LZoneID = 10;
+}
+
+message LogPlayerLevelFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LLevel = 6;
+    optional string LZoneID = 7;
+}
+
+message LogSignInFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  Ldays = 6;
+    optional string LZoneID = 7;
+}
+
+message LogOnlineNumbers {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LiNumbers = 4;
+    optional string LZoneID = 5;
+}
+
+message LogShareBattle {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiEShareBattleType = 6;
+    required string LvBattleId = 7;
+    optional string LZoneID = 8;
+}
+
+message LogViewShareBattle {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required string LvBattleId = 6;
+    optional string LZoneID = 7;
+}
+
+message LogActivityFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiActivityId = 6;
+    required int32  LiActivityLevel = 7;
+    required string LvAward = 8;
+    required int32  LiCenterLevel = 9;
+    optional string LZoneID = 10;
+}
+
+message LogFriendDonateRequestFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required string LvFriendUid = 6;
+    required int32  LiCharType = 7;
+    required int32  LiCharLevel = 8;
+    optional string LZoneID = 9;
+}
+
+message LogGameSvrState {
+    required string LdtEventTime = 1;
+    required string LvGameIP = 2;
+    optional string LZoneID = 3;
+}
+
+message LogBuildingSpeedUpFlow {
+    enum SpeedUpSource {
+        Task = 1;
+        Friend = 2;
+        SystemFriend = 3;
+        Gem = 4;
+    }
+
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiBuildingType = 6;
+    required int32  LiSpeedUpSource = 7;
+    optional string LZoneID = 8;
+}
+
+message LogSpellCreateFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiCenterLevel = 6;
+    required int32  LiSpellType = 7;
+    required int32  LiSpellLevel = 8;
+    optional string LZoneID = 9;
+}
+
+message LogStrategyCreateFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiCenterLevel = 6;
+    required int32  LiStrategyType = 7;
+    required int32  LiStrategyLevel = 8;
+    optional string LZoneID = 9;
+}
+
+message LogSuperLeagueFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiCenterLevel = 6;
+    required int32  LiOldSeg = 7;
+    required int32  LiNewSeg = 8;
+    optional string LZoneID = 9;
+}
+
+message LogSpellUseFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiCenterLevel = 6;
+    required int32  LiSpellType = 7;
+    required int32  LiSpellLevel = 8;
+    required int32  LiBattleType = 9;
+    optional string LZoneID = 10;
+}
+
+message LogStrategyUseFlow {
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiCenterLevel = 6;
+    required int32  LiStrategyType = 7;
+    required int32  LiStrategyLevel = 8;
+    required int32  LiBattleType = 9;
+    optional string LZoneID = 10;
+}
+
+message LogReceiveCharFlow {
+    enum ReceiveSource {
+        Friend = 1;
+        Clan = 2;
+    }
+
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  Lichartype = 6;
+    required int32  Licharlevel = 7;
+    required int32  Lisource = 8;
+    required int32  LiCenterLevel = 9;
+    optional string LZoneID = 10;
+}
+
+message LogFriendHouseFlow {
+    enum ResType {
+        Gold = 1;
+        Food = 2;
+        Gem = 3;
+        Wuhun = 4;
+        Tili = 5;
+        Dragon = 6;
+        Pekka = 7;
+    }
+
+    required string LGameSvrId = 1;
+    required string LdtEventTime = 2;
+    required string LvGameAppid = 3;
+    required int32  LPlatID = 4;
+    required string Lvopenid = 5;
+    required int32  LiCenterLevel = 6;
+    optional int32  LiResType1 = 7  [default = 0];
+    optional int32  LiResNum1 = 8   [default = 0];
+    optional int32  LiResType2 = 9  [default = 0];
+    optional int32  LiResNum2 = 10  [default = 0];
+    optional int32  LiResType3 = 11 [default = 0];
+    optional int32  LiResNum3 = 12  [default = 0];
+    optional int32  LiResType4 = 13 [default = 0];
+    optional int32  LiResNum4 = 14  [default = 0];
+    optional string LZoneID = 15;
+}
+
+message LogCommonFlow {
+    required string LDetail = 1;
+    optional string LZoneID = 2;
+}
+
+message TpLogin {
+    required string TvOpenid = 1;
+    required int32 nChannel = 2; 
+    required uint64 nConnId = 3;
+    required int32  TClientVer = 4;
+    required uint32  TClientIp = 5;
+    optional string LZoneID = 6;
+}
+
+message TpLogout {
+    required string TvOpenid = 1;
+    required int32 nChannel = 2; 
+    optional string LZoneID = 3;
+}
+
+message TpDataRecv {
+    required string TvOpenid = 1;
+    required int32 nChannel = 2; 
+    required bytes TData = 3;
+    optional string LZoneID = 4;
+}
+
+message TpDataSend {
+    required uint64 nConnId = 1;
+    required bytes TData = 2;
+    optional string LZoneID = 3;
+}
+

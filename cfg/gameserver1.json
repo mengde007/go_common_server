@@ -1,0 +1,14 @@
+{
+	"comment1": "请配置cnserver的外网ip地址:7900",
+	"CnsHost" : "0.0.0.0:7900",
+	"CnsHostForClient": "192.168.8.115:7900",
+	"DebugHost" : "127.0.0.1:5900",
+    "GcTime" : 120,
+    "CpuProfile" : false,
+    "ServerId" : 1,
+    "MaxPlayerCount" : 10000,
+	"comment2": "请配置cnserver的内网ip地址:8900",
+	"CnsForCenter" : "127.0.0.1:8900",
+	
+	"FsHost":[ "127.0.0.1:8910"]
+}

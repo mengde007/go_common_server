@@ -1,0 +1,25 @@
+dbtool简介
+
+工具执行流程为：
+dbtool遍历account数据库，然后向后端的dbserver查询玩家的具体信息。在内存里
+进行解码，然后把经分需要的数据写入目标机的db_ttdsg_playerdata库。
+
+目录结构
+/bin:里面是dbserver和dbtool可执行文件(linux 平台)
+/cfg:进程所需要的配置表
+/designer:天天斗三国的游戏定义配置表
+dbtool.sql 目标机创建mysql库表的sql语句。
+
+
+使用方法：
+目前天天斗三国有微信和手Q两个区。所以配置部署2套，说明以手Q区为例,微信区相同。
+
+首先需要启动2个dbserver进程，分别连接dbBase备份库，和dbExtern备份库
+dbserverBase.json里面配置dbBase备份库的IP端口以及库账户密码等。
+dbserverExtern.json 指向dbExtern备份库的IP端口以及库账户密码等。
+
+dbserver启动好后，启动dbtool进程。
+dbtool需要accountserver.json来遍历account库数据
+client.json配置后端的dbserver IP位置。
+designer.json, logger.json为项目基础配置（已经配置好，可以不用修改）。
+所有数据查询一遍后，dbtool进程自动退出。

@@ -1,0 +1,6 @@
+ID,StageNum,StageName,MatchSystemType,RoundTimes,InningTimes,RemainAmount
+int,int,varchar(128),int,int,int,varchar(255)
+1,1,__-____,3,3,3,1_30#2_12
+2,1,__-____,3,4,3,1_90#2_60#3_30
+3,1,__-____,3,3,3,1_30#2_12
+4,1,__-____,3,3,3,1_30#2_12

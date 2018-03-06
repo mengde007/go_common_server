@@ -1,0 +1,1380 @@
+package rpc;
+
+message PlayerBaseInfo{
+    required string uid = 1;
+    required string name = 2;
+    optional int32 sex = 3; //0:男，1:女
+    required int32 level = 4;
+    optional int32 exp  = 5;
+    optional int32 vipLeftDay = 6; //剩余vip天数
+    optional int32 header = 7; //头像
+    optional int32 coin = 8; //金币
+    optional int32 gem = 9; //宝石
+    optional int32 roleId = 10; //角色Idr
+    optional string gameType = 11; //名字
+    optional int32 roomType = 12; //房间类型 (daer:大二， custerroom:房间，poker:德州扑克，mj：麻将)
+    optional int32 insurCoin = 13; //保险箱中的钱
+    optional int32 accountType = 14;//0:游客，1:微信
+    repeated string friendUids = 15; //好友
+    optional string headerUrl = 16; //头像地址
+    optional string phone = 17; //手机
+    optional bool bModifyName = 18;//是否个性过名字
+    optional bool bModifySex = 19;//是否个性过性别
+    optional int32 lastLoginTime = 20; //最后1次登陆时间
+    optional int32 profits =21; //每日赚金
+    optional int32 expTotal =22; //总经验
+    optional int32 vipOpenTime = 23; //vip开通时间
+}
+
+message PlayerExtraInfo {
+    repeated BagItem items = 1;
+    optional Signature sign = 2;
+    optional DailyTask tasks = 3;
+    repeated Score scores = 4;
+    optional BankruptInfo bankrupt = 5;
+}
+
+message BagItem {
+    required string id = 1; //道具Id
+    required int32 num = 2; //道具数据
+}
+
+message BagItemNofity {
+   repeated BagItem items = 1; 
+}
+
+message Signature {
+    optional int32 month = 1; //上次签到的月份
+    repeated int32 signs = 2; //本月已经签到的天
+    optional int32 lastSign = 3;//上次签到是哪天
+    optional int32 contiDay = 4; //连续签到几天
+    optional int32 contiRewardTms = 5;//连续签到奖励领取次数
+}
+
+message DailyTask {
+    optional int32 resetTime = 1; //上次重置时间
+    repeated int32 doneIds = 2; //已经完成的任务Id
+    repeated int32 getIds = 3; //已经领取奖励的任务Id
+    optional int32 shares = 4;//分享N次朋友圈
+    optional int32 shareFris = 5;//分享N次给好友
+    optional int32 daerTms= 6;//玩大二N盘
+    optional int32 mjTms= 7;//玩麻将N盘
+    optional int32 pokerTms= 8;//玩扑克N盘
+    optional int32 winDaerTms= 9;//赢大二N盘
+    optional int32 winMjTms= 10;//赢麻将N盘
+    optional int32 winPokerTms= 11;//赢扑克N盘
+}
+
+message Score {
+    required string name = 1; //daer, mj, poker
+    required int32 win = 2; //失利次数
+    required int32 loss = 3; //失败次数
+}
+
+//破产奖励信息
+message BankruptInfo{
+    optional int32 time = 1;//领奖时间
+    optional int32 rewardTimes = 2;//领奖次数
+}
+
+message ScoreNofify{
+    repeated Score scores = 1;
+}
+
+
+message Request{
+    required string method = 1;
+    optional bytes serialized_request = 2;
+}
+
+message LoginCnsInfo{
+    required string cnsIp = 1;
+    required string gsInfo = 2;
+    optional int32 versionOld = 3;
+    optional int32 versionNew = 4;
+    optional string downloadUrl = 5;
+    optional int32 versionMid = 6;
+}
+
+message Login{
+    optional string uid = 1;
+    optional string openid = 2;
+    optional int32  roleId = 3;
+    optional string headerUrl = 4; //头像地址
+    optional string nickName = 5;  //微信昵称
+    optional int32  sex = 6; //性别 0:男，1:女
+    optional string clientVersion = 7; // 客户版本：1_0_1 服务器制作比对字符
+}
+
+message LoginResult{
+  required string result = 1 ;
+  required int64 server_time = 2;
+  optional string errmsg = 3; // "version_error",
+  optional string openid = 4;
+  optional string uid  = 5;
+  optional int32 roleId = 6; //角色Id
+}
+
+message PlayerInfo{
+    required PlayerBaseInfo base = 1;
+    optional PlayerExtraInfo extra = 2;
+}
+
+message ResourceNotify{
+    optional int32 coin = 1; //金币
+    optional int32 gem = 2; //宝石
+    optional int32 insurCoin = 3; //保险箱中的钱
+    optional int32 level = 4; //等级
+    optional int32 exp = 5;//经验
+}
+
+message OnlineBody{
+    required int32 roomId = 1; //房间Id
+    required int32 num = 2; //在线人数
+}
+
+message OnlineInfo{
+    repeated OnlineBody info = 1;
+}
+
+//在线人数
+message OnlinePlayerReq{
+    repeated int32 partIds = 1; //游戏Id, 1.大二，2.麻将，3.德州扑克
+}
+
+message OnlinePlayerMsg{
+    optional OnlineInfo daerInfo = 1; //大二房间在线人数
+    optional OnlineInfo mjInfo = 2; //麻将房间在线人数
+    optional OnlineInfo pokerInfo = 3; //德州扑克房间在线人数
+}
+
+message NotifyMsg{
+    optional string txtId = 1; //文本配置表Id
+}
+
+//心跳
+message HeartBeat{
+}
+
+//心跳回复
+message HeartBeatRst{
+    optional int64 time = 1;
+}
+
+//所在游戏房间
+message PlayerInRoomNotify{
+    // 1 = 匹配房间大贰 2 = 匹配房间麻将 3 = 匹配房间德州
+    // 4 = 自建房间大贰 5 = 自建房间麻将 6 = 自建房间德州
+    // 7 = 比赛房间大贰 8 = 比赛房间麻将 9 = 比赛房间德州
+    required string gameType = 1; //游戏类型
+    required int32 roomType = 2; // 房间id
+}
+
+//更新玩家信息
+message RoleInfo{
+    optional string name = 1;
+    optional int32 sex = 2;
+    optional string phone = 3;
+}
+
+//邮件
+message SysMail
+{
+    required string mailId = 1;
+    required int32 version = 2;
+    required string title = 3;
+    required string content = 4;
+    required int32 sendtime = 5;
+    optional string attach = 6; //附件Id:数量,附件Id2:数量
+    optional int32 overduetime = 7;
+    optional bool bRead = 8; //是否已读
+}
+
+message PlayerMailInfo
+{
+    required int32 sysmail_version = 1;
+    repeated SysMail maillist = 2;
+}
+
+// 阅读有一封邮件
+message ReqReadOneMail{
+    required string mailId = 1;
+}
+
+// 删除邮件
+message RemoveMailNotify{
+    repeated int32 mailIds = 1;
+}
+
+// 新增邮件
+message AddMailNotify{
+    repeated SysMail maillist = 1;
+}
+
+// 玩家发送一条广播
+message ReqBroadCast{
+    required string playerID   = 1; // 玩家id
+    optional string content    = 2; // 公告内容
+    optional bool bVip         = 3;
+    optional string playerName = 4;
+}
+
+//S2C发送广播
+message BroadCastNotify{
+    required int32 broadCastID  = 1; // 公告id
+    required bool sysBroad     = 2; // true:系统， false:玩家
+    required string content    = 3; // 广播内容
+    optional string playerName = 4; // 玩家名字
+    optional string playerID   = 5; // 玩家Uid
+    optional bool vip          = 6; // true:vip, false:非Vip玩家
+}
+
+// 聊天结构
+message FightChat{
+    optional int32 chatType  = 1; // 1 = 表情, 2 = 固定文字 (这里用枚举便于扩充) 3 = 自定义文字
+    optional int32 faceID    = 2; // 表情id
+    optional int32 fixWordID = 3; // 固定文字id
+    optional string gameType  = 4; // 1.大二，2.麻将，3.德州扑克
+    optional string customContent  = 5; // 自定义聊天类容
+    optional string itemId = 6; //使用的道具Id
+    optional string receiverPlayerID = 7; // 对谁使用
+}
+
+// 发送聊天
+message ReqFightRoomChat{
+    required string playerID         = 1;
+    required FightChat fighChatinfo = 2;
+}
+
+// 聊天内容通知给客户端
+message FightRoomChatNotify{
+    required string playerID         = 1;
+    optional FightChat fighChatinfo = 2;
+    optional bool offline = 3; //true：玩家离线 , false:上线
+}
+
+message Notice{
+    required string content = 1;
+}
+
+//存钱或取钱
+message ReqInsurenceMoney{
+    required bool bWithdraw = 1; //true:取钱，false：存钱
+    required int32 value = 2; //存取金额
+}
+
+message Player{
+    required string name = 1; //昵称
+    optional int32 sex = 2; //0:男，1:女
+    required int32 level = 3;
+    optional int32 header = 4; //头像
+    optional int32 roleId = 5; //角色Idr
+    optional string headerUrl = 6; //头像地址
+    optional string uid = 7;
+    optional bool bOnline = 8; //true:在线，false:不在线
+    optional int32 exp     = 9; // 当前经验值
+    optional int32 coin    = 10; // 当前携带金币
+    repeated Score scores  = 11; //胜利失败场数
+    optional int32 diamond = 12; //当前拥有宝石
+}
+
+//好友列表
+message FriendsList{
+    repeated Player friends = 1;
+}
+
+//请求好友列表
+message RequestFriendsList{
+    repeated Player friends = 1;
+}
+
+//通用，请求为单个字符串
+message ReqString{
+    optional string id = 1;
+}
+
+//通用，请求为单个数字
+message ReqInt{
+    optional int32 id = 1;
+}
+
+//查找好友通知
+message SearchFriendNofify {
+    optional Player player = 1;
+}
+
+//响应好友请求
+message ReqResponseAddFriend{
+    required string uid = 1; //对方Id
+    optional bool bAccept = 2; //true同意，false:不同意
+}
+
+//响应好友请求通知
+message AddFriendNofify{
+    required int32 rst = 1; //添加结果 0成功
+}
+
+//删除好友通知
+message DelFriendNofity{
+    required int32 rst = 1; //删除结果
+    required string id = 2; //被删除的好友Id
+}
+
+//好友uid列表
+message FriendsIdList{
+    repeated string friends = 1;    
+}
+
+//好友聊天，请求/通知
+message SendFriendChat{
+    required string senderUid = 1;
+    required string receiverUid = 2;
+    required string text = 3;
+    optional int32 sendtime = 4;
+}
+
+//离线消息
+message OfflineMsgNofity{
+    repeated SendFriendChat chatInfo = 1;
+}
+
+//好友上下线通知
+message FriendStatusNofify{
+    required string uid = 1; //好友Uid
+    required bool bOnline = 2; //true 上线, false 下线
+}
+
+//修改信息成功，1.名字，2.性别，3.phone
+message ErrorCodeNofify{
+    optional int32 code = 1;
+}
+
+//任务完成通知
+message TaskFinishNofity{
+    optional string taskId = 1;
+}
+
+//分享好友或朋友圈
+message ReqTaskShare{
+    optional bool bShare2Friend = 1; //true:分享给好友，false:分享到朋友圈
+}
+
+message ReqRankList{
+    required int32 rankType = 1;    //排行类型:1、赚金榜 2、富豪榜 3、经验榜
+}
+
+message RankInfo{
+    required string uid = 1;
+    required int32 roleId = 2;
+    required int32 sex = 3;
+    required string name = 4;
+    required int32 level = 5;
+    required int32 exp  = 6;
+    required bool bVip = 7; //剩余vip天数
+    required int32 coin = 8; //金币
+    required int32 gem = 9; //宝石
+    required string headerUrl = 10; //头像地址
+    required int64 rankValue = 11; //排行数据（如果是赚金榜，则就是今日赚金多少，以此类推）
+    optional int32 rankNum = 12;    //排名
+}
+
+message RankList{
+    repeated RankInfo rankList = 1;
+    required int32 rankType = 2; //排行榜类型
+}
+
+//---------------------------------------------------- old
+
+message FormatedMsg {
+    required string code = 1;
+    repeated MsgArg args = 2;
+}
+
+
+message Msg{
+    optional string code = 1;
+    optional string text = 2;
+}
+
+message NumberMsg{
+    optional int32 value = 1;
+}
+
+message MsgArg {
+    optional string s = 1;
+    optional int32 i = 2;
+}
+
+message GuestBindOk {
+    optional bool success = 1;
+}
+
+message Ping{
+	optional int64 ClientTime = 1;
+}
+
+message PingResult{
+	required int32 server_time = 1;
+}
+
+
+// 长时间在线强制离线
+message KickPlayerMsg {
+        optional int32 time = 1;
+}
+
+message C2SChatP2P
+{
+	required string ToPlayerId = 1;
+	required string ChatContent = 2;
+}
+
+message C2SChatAlliance
+{
+	required string ChatContent = 1;
+	optional bool useIM = 2;
+    optional string voiceTime = 3;//语音时长
+}
+
+message C2SChatWorld
+{
+	required string ChatContent = 1;
+	optional bool   useIM = 2;
+    optional string voiceTime = 3;//语音时长
+}
+
+message S2CChatP2P
+{
+	required string FromPlayerId = 1;
+	required string FromPlayerName = 2;
+	required int32 FromPlayerLevel = 3;
+	required string ChatContent = 4;
+}
+
+message S2CChatWorld
+{
+    required string FromPlayerId = 1;
+    required string FromPlayerName = 2;
+    required int32 FromPlayerLevel = 3;
+	required int64 ChatTime = 6;
+    required string ChatContent = 7;
+   optional bool useIM = 10;
+   optional string voiceTime = 11;//语音时长
+   optional int32 messageId = 12;//消息id，客户端某些情况需要这个东西
+}
+
+
+///////////////////////////////泸州大二///////////////////////////////////////////// 
+//Card.flag的枚举
+//const (
+//  CUnknown  = 1         //未知
+//  CPositive = 2         //正面
+//  CBack     = 4         //背面
+//  CLock     = 8         //锁定
+//)
+message Card {
+    required int32 value = 1;   // 牌值
+    required bool bBig   = 2;   // 大小
+    required bool bLock  = 3;   // 是否锁定
+    optional bool bChi   = 4;   // 是否是吃的牌
+    optional bool bHu    = 5;   // 是否是胡牌
+}
+
+//Pattern.ptype的枚举
+//const (
+//    PTUknown = iota
+//    PTSingle
+//    PTPair
+//    PTKan
+//    PTZhao
+//    PTAABColumn
+//    PTEQSColumn
+//    PTSZColumn
+//    PTPeng
+//    PTLong
+//    PTOneTwoThree
+//)
+
+message Pattern {
+    optional int32 ptype = 1; // 牌的类型
+    repeated Card cards  = 2; // 牌型中的所有牌
+    optional int32 hu    = 3; // 胡数
+}
+
+message UserInfo{
+    required string playeID  = 1; // 玩家id
+    required string name    = 2; // 名字
+    required int32 coins    = 3; // 金币
+    optional bool bVip      = 4; // 是否是vip
+    required string head    = 5; // 头像id
+    required int32 sex      = 6; // 性别  1= 男, 2 = 女
+}
+
+// 请求进入房间
+message EnterRoomREQ {
+    required string gameType = 1; //游戏类型
+    required int32 roomType = 2; //房间类型及房间配置表的ID(扑克自建房传房号)
+}
+
+// 快速进入房间
+message QuickEnterRoomREQ {
+}
+
+
+// 玩家进入房间(没准备)
+message EnterRoomACK {
+    optional PlayerBaseInfo playerInfo = 1;
+    optional int32 shangjiaType  = 2; //1:上家 2:下家 3:中(自己)
+    optional bool bReady  = 3; // 是否准备
+    optional int32 code   = 4; // 错误码 0:无，1：金币太少，2：达到了房间的金币上限
+    optional int32 roomId  = 5; // 进入的房间id
+    optional bool isNormalReqEnterRoom = 6; //是否是正常请求 (只有在code不为0的时候才有效，为0不会填此字段)
+    
+}
+
+// 某某玩家离开房间
+message LeaveRoomREQ { 
+    required string playerID = 1;
+    required bool isChangeDesk = 2; //是否是换桌
+}
+
+// 离开房间通知其他人
+message LeaveRoomACK {
+    required string playerID = 1;
+    required bool isChangeDesk = 2; //是否是换桌
+}
+
+message CountDown {
+    required string playerID          = 1;
+    optional int32 currentCountDown   = 2; // 当前玩家倒计时
+}
+
+// 房间中对战玩家的信息
+message FightPlayerInfo{
+    required string playerID             = 1;
+    repeated Card handCards              = 2;
+    repeated Pattern longPattern         = 3;
+    repeated Pattern kanPattern          = 4;
+    repeated Card erLongTouYi            = 5; // 二拢偷1摸的牌
+
+    repeated Card chuGuoCards            = 6; // 当前玩家所有出，过过的牌
+    repeated Pattern chiPengZhaoLongCards = 7; // 当前玩家所有吃彭招拢的牌
+    optional int32 currentHu             = 8; // 当前胡数
+    optional bool bZhuang                = 9; // 是否是庄
+    optional bool bBao                   = 10; // 是否是报
+    optional bool bTuoGuan               = 11; //是否托管
+}
+
+// 当前战斗中的桌面状态
+message FightCurrentStateInfo{
+    optional Card currentDeskCard            = 1; // 当前桌面出的牌
+    repeated CountDown currentCountDownInfo  = 2; // 当前玩家倒计时
+    optional string currentDeskCardPlayerID  = 4; // 当前桌面上出的牌的玩家的id
+    required int32 currentDeskRemainCard     = 5; // 当前桌面剩余牌数
+    optional bool bCurrentDeskCardMo        = 6; // 当前桌面这张牌是不是摸牌（否则是出牌） 
+}
+
+// 所有玩家准备好看，游戏开始
+message GameStartACK {
+    repeated FightPlayerInfo fightPlayersInfo        = 1; // 对战玩家的信息
+    optional FightCurrentStateInfo currentFightState = 2; // 当前战斗中的桌面状态
+    // 0 = 初始化 1 = 对战中 2 = 结算状态
+    optional int32 fightState = 5; // 当前战斗中的桌面状态
+}
+
+
+//动作(Action)
+//const (
+//    ANone          = iota
+//    AReady         //准备
+//    ACancelReady   //取消准备
+//    ATuoGuan       //托管
+//    ACancelTuoGuan //取消托管
+//    AGuo
+//    AChu
+//    AMo  //进到手上的牌，此牌可以替换手牌的
+//    AJin //桌面上翻的一张牌或其他玩家出的一张牌
+//    AChiBi
+//    AChi
+//    APeng
+//    AZhao
+//    AZhongZhao
+//    ALong
+//    ABaKuai
+//    AHu
+//    ABao
+//    ASanLongBai
+//    ASiKanBai
+//    AHeiBai
+//)
+
+// 请求动作
+message ActionREQ {
+    required int32 action = 1; // 动作类型
+    required string playerID = 2; // 玩家Id
+    optional Pattern chiCards = 3; // 可以吃的牌组
+    optional Pattern biCards = 4; // 可以吃的牌组
+    optional Card chuPai = 5; // 玩家出的牌
+    optional MJCard cardArgs    = 10; // 参数牌 --麻将
+    required int32 sysType = 6; // 对战房间类型（匹配 = 1，自建，比赛场）
+}
+
+// 吃牌动作的参数
+message ChiAtionArgs {
+    optional Pattern canChiCards = 1; // 可以吃的牌组
+    repeated Pattern needBiCards = 2; // 吃的牌组需要比的牌组
+    optional Card cardArgs       = 3; // 吃比那张牌
+}
+
+//动作错误码
+//const (
+//    ACSuccess = 0
+//    ACAbandon  //放弃
+//    ACWaitingOtherPlayer //等待其他玩家操作
+//    AOccursError                //发送生了错误
+//)
+// 广播动作执行结果回复
+message ActionACK{
+    required int32 action                 = 1;  
+    optional string playerID              = 2;
+    optional Card cardArgs                = 4; // 摸到手中牌的牌或者翻到桌子上的牌
+    repeated Pattern chiPengZhaoLongCards = 6; // 当前玩家吃碰招拢的牌
+    optional int32 updateHu               = 7; // 更新玩家的胡数
+    optional int32 currenDeskRemianCard   = 8; // 当前桌面剩余底牌
+    required int32 result                 = 9; // 0:成功，1- 255错误码
+}
+
+// 通知某一个玩家触发的动作
+message ActionNotifyACK {
+    required int32 action              = 1; // 动作类型
+    repeated ChiAtionArgs chiAtionArgs = 3; // 吃牌的所有组合(包含了需要比的牌),有多个吃的牌型,repeated类型发多个
+}
+
+
+//通知倒计时
+message CountdownNotifyACK{
+    required CountDown countDown       = 1; // 倒计时信息
+}
+
+//通知过牌
+message PassCardNotifyACK {
+    required string playerID = 1; //玩家
+    required Card card = 2; //过的卡牌
+}
+
+message PassedNotifyACK {
+    required Card card = 1;//已过的牌
+}
+
+//名堂
+//const (
+//    MTSanLongBai    = iota //三拢摆牌
+//    MTSiKanBai             //四坎摆拍
+//    MTHeiBai               //黑摆
+//    MTLuanHu               //乱胡
+//    MTTianHu               //天胡
+//    MTDiHu                 //地胡
+//    MTBaoPai               //报牌
+//    MTShuiShangPiao        //谁上漂
+//    MTHaiDiLao             //海底捞
+//    MTKun                  //坤
+//    MTHongPai              //红牌
+//    MTHeiPai               //黑牌
+//    MTChaJiao              //查叫
+//    MTZhaTianBao           //炸天报
+//    MTShaBao               //杀报
+//    MTGui                  //归
+//    MTZiMo                 //自摸
+//    MTDianPao              //点炮
+//)
+
+message MingTang {
+    required int32 mingTang = 1; //名堂ID
+    required int32 value = 2; //名堂值
+
+} 
+
+//结算金币信息
+message JieSuanCoin{
+    required string playerID = 1;//玩家ID
+    optional int32 coin = 2; //金币信息
+    optional int32 tag = 3; //是0:无，1:自摸，2：点炮, 3:破产
+}
+
+message DaerPlayerJieSuanPattern{
+    required string playerID   = 1;
+    optional int32 hu          = 3;    //牌的胡数
+    optional int32 score       = 5;    //牌的分数
+    repeated Pattern patterns  = 7;    //赢家的模式列表 客户端自己组合，所有单排类型一个组，其他碰杠的服务器已经组合
+    repeated MingTang mingTang = 9;    //名堂值
+    required int32 coin        = 11; //金币信息
+    required int32 tag         = 13; //是0:无，1:自摸，2：点炮, 3:破产
+}
+
+// 结算
+message JieSuanNotifyACK{
+    repeated DaerPlayerJieSuanPattern daerPlayerJieSuanPattern = 1;     //结算的金币信息
+    repeated Card diCards                                      = 7;     //底牌
+    optional bool huangZhuang                                  = 9;     //是否黄庄
+    optional JieSuanAdditionData addi                          = 11;    //结算附加数据
+}
+
+// 结算附加数据
+message JieSuanAdditionData {
+    optional int32 sysType = 1;        //房间的系统类型（匹配房，自建房，比赛房等）
+    optional bool stageEnd = 2;        //此阶段（匹配房：不使用此项，自建房：打完指定的场数，比赛房：完成一个阶段（初赛，复赛，决赛等））结束吗 -
+    optional bool success = 3;         //成功吗，匹配房：不使用此项，自建房:不使用此项，比赛房：没有淘汰就算成功
+    repeated JieSuanCoin coin = 4;      //结算的金币信息, tag字段是无效的
+    optional int64 jieSuanTime = 5;    //结算的时间
+    optional int32 curTimes = 6;       //当前打到第几局了
+    optional int32 continueTime = 7;       //持续时间
+}
+
+//最终结算
+message FinalJieSuanNotifyACK{
+    required JieSuanAdditionData jieSuanInfo = 1; //最终结算消息
+}
+
+///////////////////////////////泸州鬼麻将///////////////////////////////////////////// 
+
+// 客户端用法
+//bit.bor(card.flag ,CTianHu) >0 
+//bit.bor(card.flag ,CZiMoHu) >0 
+//bit.bor(card.flag ,CZiMoHu) >0 
+
+//flag的值
+//CUnknown  = 1 //未知
+//CPositive = 2                      //正面
+//CBack     = 4                      //背面
+//CLock     = 8                      //锁定出牌
+//CChi      = 16                     //吃牌
+//CHu       = 32                     //胡牌
+//CLockHongZhongValue = 64           //锁定鬼牌的替换值
+//CTianHu   = 128                    //天胡
+//CZiMoHu   = 256                    //自摸胡
+//CDianPaoHu = 512                   //点炮胡
+//CGangShangHu = 1024                   //杠上胡（杠上花）
+//CGangShangPaoHu = 2048             //杠上炮
+
+//cType和rcType
+//UnknowCardType    = 0
+//Tiao              = 1
+//Tong              = 2
+//Wan               = 3
+//HongZhong         = 4
+message MJCard {
+    required int32 value    = 1;    //点数
+    required int32 cType    = 2;    // Tiao, Tong, Wan, HongZhong
+    required int32 rcType   = 3;    // Tiao, Tong, Wan
+    optional int32 flag     = 4;    // 牌的flag
+}
+
+
+//Pattern.ptype的枚举
+//const (
+//PTUknown = 0
+//PTSingle  // 单拍
+//PTPair  // 对子
+//PTKan // 碰
+//PTGang // 杠
+//PTAnGang // 用于重连接显示是明杠还是暗杠
+//PTSZ // 顺子
+//)
+message MJPattern {
+    required int32 ptype  = 1;      // 模式类型
+    required int32 cType  = 2;      // 牌的类型 （说明同 MJCard.cType）
+    repeated MJCard cards = 3;      // 牌型中的所有牌
+    optional bool isShow  = 4;      // 是否倒下显示
+}
+
+// 快速进入房间
+message MJQuickEnterRoomREQ {
+}
+
+// 玩家进入房间(没准备)
+message MJEnterRoomACK {
+    optional PlayerBaseInfo playerInfo = 1;
+    optional int32 location  = 2; //固定位子（东西南北）
+    optional bool bReady  = 3; // 是否准备
+    optional int32 code   = 4; // 错误码 0:无，1：金币太少，2：达到了房间的金币上限
+    optional int32 roomId  = 5; // 进入的房间id
+    optional bool isNormalReqEnterRoom = 6; //是否是正常请求 (只有在code不为0的时候才有效，为0不会填此字段)，金币多了或少了跳转房间类型
+    
+}
+
+// 某某玩家离开房间
+message MJLeaveRoomREQ { 
+    required string playerID = 1;
+    required bool isChangeDesk = 2; //是否是换桌
+}
+
+// 离开房间通知其他人
+message MJLeaveRoomACK {
+    required string playerID = 1;
+    required bool isChangeDesk = 2; //是否是换桌
+}
+
+message MJCountDown {
+    required string playerID          = 1;
+    optional int32 currentCountDown   = 2; // 当前玩家倒计时
+}
+
+// 房间中对战玩家的信息
+message MJFightPlayerInfo{
+    required string playerID        = 1;
+    repeated MJCard handCards       = 2;
+    repeated MJPattern showPatterns = 4;  // (碰杠的牌)
+    repeated MJCard chuCards        = 6;  // 当前玩家所有出，过过的牌
+    optional bool bZhuang           = 9;  // 是否是庄
+    optional bool bBao              = 10; // 是否是报
+    optional bool bTuoGuan          = 11; // 是否托管
+    optional int32 handCardCount    = 12; // 非自己下发到其他玩家客户端，只需数量即可（防作弊）
+    optional MJCard alreadyCardArg  = 13; // 如果玩家已经胡了,则有胡牌否则没有胡
+}
+
+// 当前战斗中的桌面状态
+message MJFightCurrentStateInfo{
+    required int32 currentCountDown             = 2; // 当前玩家倒计时
+    required string activePlayerID              = 3; // 当前的活动玩家
+    optional string lastActivePlayerID          = 4; // 上一个活动的玩家
+    required int32 currentDeskRemainCard        = 5; // 当前桌面剩余牌数
+}
+
+// 所有玩家准备好看，游戏开始
+message MJGameStartACK {
+    repeated MJFightPlayerInfo fightPlayersInfo         = 1; // 对战玩家的信息
+    optional MJFightCurrentStateInfo currentFightState  = 2; // 当前战斗中的桌面状态
+    optional int32 fightState                           = 5; // 当前战斗中的桌面状态 (0 = 初始化 1 = 对战中 2 = 结算状态)
+}
+
+
+//动作(Action)
+//const (
+//ANone          = iota
+//AReady         //准备
+//ACancelReady   //取消准备
+//ATuoGuan       //托管
+//ACancelTuoGuan //取消托管
+//AGuo           //过
+//AChu           //出
+//AMo            //摸
+//APeng          //碰
+//ATiePeng       //贴鬼碰
+//AAnGang        //暗杠
+//AMingGang      //明杠
+//ATieMingGang   //贴鬼明杠
+//ABuGang        //补杠
+//AHu            //胡
+//ABao           //报
+//)
+
+// 请求动作
+//message MJActionREQ {
+//    required int32 action       = 1; // 动作类型
+//    required string playerID    = 2; // 玩家Id
+//    optional MJCard cardArgs    = 5; // 参数牌
+//    required int32 sysType      = 6; // 对战房间类型（匹配 = 1，自建，比赛场）
+//}
+
+//动作错误码
+//const (
+//    ACSuccess = 0
+//    ACAbandon  //放弃
+//    ACWaitingOtherPlayer //等待其他玩家操作
+//    AOccursError                //发送生了错误
+//)
+// 广播动作执行结果回复
+message MJActionACK{
+    required int32 action                 = 1;  
+    optional string playerID              = 2;
+    optional MJCard cardArgs              = 4; // 参数牌（摸，出牌等）
+    repeated MJPattern pengGangPattern    = 6; // 碰杠的结果
+    optional int32 currenDeskRemianCard   = 8; // 当前桌面剩余底牌
+    required int32 result                 = 9; // 0:成功，1- 255错误码
+}
+
+
+// 吃牌动作的参数
+message MJActionArgs {
+    required int32 action           = 1; // 动作类型
+    repeated MJCard cardsArgs       = 3; // 碰杠有不同的碰杠类型
+}
+
+// 通知某一个玩家触发的动作
+message MJActionNotifyACK {
+    repeated MJActionArgs  actions = 1; //动作列表
+}
+
+
+//通知倒计时
+message MJCountdownNotifyACK{
+    required MJCountDown countDown       = 1; // 倒计时信息
+}
+
+//通知移除玩家出的牌
+message MJRemoveCardNotifyACK{
+    required string playerID = 1;  //玩家ID
+    required bool  isRemoveHandCard = 2;
+    required MJCard card = 3;  //被移除的牌
+}
+
+//客户端要不要贴鬼杠/碰
+message MJTieGuiREQ{
+    required bool bTieGui = 1;  // fasle:不贴，true:贴鬼
+    required string playerID = 2; // 玩家Id
+    required int32 sysType = 6; // 对战房间类型（匹配 = 1，自建，比赛场）
+}
+
+
+//名堂
+//const (
+//MTZiMo          = iota //自摸
+//MTGui                  //归
+//MTDaDuiZi              //大对子
+//MTQingYiSe             //清一色
+//MTNoneHongZhong        //无鬼
+//MTQiDui                //七对
+//MTGangShangHua         //杠上花
+//MTGangShangPao         //杠上炮
+//MTQiangGang            //抢杠
+//MTTianHu               //天胡
+//MTBao                  //报牌
+//MTDingBao              //顶报
+//)
+
+message MJMingTang {
+    required int32 mingTang = 1; //名堂ID
+    required int32 value = 2; //翻数
+
+} 
+
+//单个玩家的结算信息
+message MJPlayerJieSuanInfo{
+    required string playerID = 1;//玩家ID
+    optional int32 coin = 2; //金币信息
+    repeated MJPattern patterns = 6;      //赢家的模式列表
+    repeated MJMingTang mingTang = 10;    //名堂值
+
+
+    optional int32 tag = 3; //是0:无，1:自摸，2：点炮, 3:破产（废弃）
+}
+
+// 结算
+message MJJieSuanNotifyACK{
+    repeated MJPlayerJieSuanInfo playerJieSuanInfo = 3;      //单个玩家的结算信息
+    optional bool huangZhuang = 9;      //是否黄庄
+    
+    optional JieSuanAdditionData addi = 11; //结算附加数据
+}
+
+//单个玩家的结算信息
+//message MJAddiJieSuanCoin{
+//    required string playerID = 1;//玩家ID
+//    optional int32 coin = 2; //金币信息
+//}
+//
+//// 结算附加数据
+//message MJJieSuanAdditionData {
+//    optional int32 sysType = 1;        //房间的系统类型（匹配房，自建房，比赛房等）
+//    optional bool stageEnd = 2;        //此阶段（匹配房：不使用此项，自建房：打完指定的场数，比赛房：完成一个阶段（初赛，复赛，决赛等））结束吗 -
+//    optional bool success = 3;         //成功吗，匹配房：不使用此项，自建房:不使用此项，比赛房：没有淘汰就算成功
+//    repeated MJAddiJieSuanCoin coin = 4;      //结算的金币信息
+//    optional int64 jieSuanTime = 5;    //结算的时间
+//    optional int32 curTimes = 6;       //当前打到第几局了
+//    optional int32 continueTime = 7;       //持续时间
+//}
+//
+////最终结算(自建房)
+//message MJFinalJieSuanNotifyACK{
+//    required MJJieSuanAdditionData jieSuanInfo = 1; //最终结算消息
+//}
+
+
+
+
+//自建房间的消息
+//currencyType
+//const (
+//    CTCredits = 1 //游戏积分
+//    CTCoin    = 2 //游戏金币
+//)
+message CreateRoomREQ{
+    //required string name = 1; //房间名字
+    required int32 currencyType = 1; //货币类型
+    required int32 gameType = 2; //游戏类型
+    //optional string pwd = 3; //房间密码
+    optional int32 difen = 4; //房间底分
+    optional int32 limitCoin = 5; //限制进入的金币
+    optional int32 times = 6; //场次数量
+    required int32 maxMultiple = 7; //最大倍数
+    optional bool  isDaiGui = 8; //是不是带归-大贰
+    optional int32 tiYongAmount = 9; //替用数量-麻将
+    optional int32 qiHuKeAmount = 10; //起胡颗数-麻将
+
+}
+
+message RoomInfo{
+    required int32 id = 1;  //房间ID
+    //required string name = 2; //房间名字
+    required int32 currencyType = 2; //货币类型
+    required int32 gameType = 3; //房间类型
+    required int32 difen = 4; //房间底分
+    required int32 limitCoin = 5; //限制进入的金币
+    required int32 times = 6; //场次数量
+    required int32 maxMultiple = 7; //最大倍数
+    optional bool  isDaiGui = 8; //是不是带归-大贰
+    optional int32 tiYongAmount = 9; //替用数量-麻将
+    optional int32 qiHuKeAmount = 10; //起胡颗数-麻将
+    //required int32 playerCount = 7; //玩家数量
+    //required bool havePwd = 8; //是否有密码
+}
+
+//创建房间的错误码定义
+//const (
+//    ECCRNone                   = iota (0)
+//    ECCRNameLength             =1 //房间的名字长度错误 (1)
+//    ECCRPwdLength              =2//密码长度错误
+//    ECCRDifen                  =3//底注不在指定范围内
+//    ECCRMatchTimes             =4//比赛次数错误
+//    ECCRCreateFrequently       =5//创建房间太频繁了
+//    ECCRConfigError            =6//配置表错误
+//    ECCRConvertRoomFailed      =7//转换房间失败
+//    ECCRNoneID                 =8//没有可用的ID了
+//    ECCRCreateRoomMinCoinLimit =9//没有达到创建房间的最小金币限制
+//    ECCRUnknowError            =10//未知错误
+//    ECCRAlreadyInRoom          =11//已经在房间了，不能再创建房间
+//    ECCRGreaterSelfCoin        =12//房间的进入金币限制不应该大于自己的金币
+//    ECCRMultipleLimit          =14//不在倍数限制范围内
+//
+//    ECCRNotEnoughRoomCard      = 1000 //没有足够的房卡
+//
+//)
+
+message CreateRoomACK{
+    optional RoomInfo room = 1; //房间信息
+    required int32 code = 2; //错误码 0:没有错误
+}
+
+message RoomListREQ{
+
+}
+
+message RoomListACK{
+    repeated RoomInfo roomList = 1; //房间列表
+}
+
+// 发起解散房间/或者对解散的操作
+message JieSanRoomREQ{
+    required int32 operatorStatus = 3; //1 = "申请者",2 = "等待处理",3 = "同意",4 = "拒绝",
+}
+
+message JieSanPlayerInfo{
+    required string playerID = 1;
+    required int32 status = 3;    //1 = "申请者",2 = "等待处理",3 = "同意",4 = "拒绝",
+}
+
+// 通知解散房间
+message JieSanRoomNotify{
+    repeated JieSanPlayerInfo jieSanPlayerInfo = 1;
+    required int32 remainTime = 3; // 操作剩余时间(时间到了默认同意)
+}
+
+// 更新玩家对解散房间的状态
+message JieSanRoomUpdateStatusNotify{
+    required JieSanPlayerInfo jieSanPlayerInfo = 1;
+}
+
+// 请求进入房间
+message EnterCustomRoomREQ {
+    // 1 = 匹配房间大贰 2 = 匹配房间麻将 3 = 匹配房间德州
+    // 4 = 自建房间大贰 5 = 自建房间麻将 6 = 自建房间德州
+    // 7 = 比赛房间大贰 8 = 比赛房间麻将 9 = 比赛房间德州
+    required string gameType = 1; //游戏类型
+    required int32 id = 3; //自建房ID
+    optional string pwd = 4;// 密码
+}
+
+
+// 玩家进入房间(没准备)
+//DaerGame    = 1 //大贰游戏
+//MaJiang     = 2 //麻将
+//DeZhouPuker = 3 //德州扑克
+
+//进入房间错误码定义
+//const (
+//  ECRNone              = iota
+//  ECRLessCoin          //金币太低
+//  ECRReachUpLimit      //金币超过上限了
+//  ECRPwdError          //密码错误
+//  ECRNotExistRoom      //不存在房间
+//  ECRConvertRoomFailed //转换房间失败
+//  ECRFull              //房间满了
+// )
+
+message EnterCustomRoomACK {
+    optional PlayerBaseInfo playerInfo = 1;
+    optional int32 shangjiaType  = 2; //1:上家 2:下家 3:中(自己) -大贰使用
+    optional int32 location  = 20; //固定位子（东西南北）-麻将使用
+    optional bool bReady  = 3; // 是否准备
+    optional int32 code   = 4; // 错误码 0:无，1：金币太少，2：达到了房间的金币上限
+    optional int32 roomId  = 5; // 进入的房间id
+    optional int32 gameType = 6; //游戏类型（大贰，麻将等...）
+    optional int32 times = 7; //房间的场次数
+    optional int32 curTimes = 8; //当前的场次数
+    optional bool isOwner = 9; //是否是房主
+    optional int32 currencyType = 10; //结算货币类型
+    optional int32 difen = 11; // 底注
+    optional int32  qiHuKeAmount = 12; // 起胡-麻将
+    optional int32 tiYongAmount = 13; // 红中数-麻将
+}
+
+// 某某玩家离开房间
+message LeaveCustomRoomREQ { 
+    required string playerID = 1;
+}
+
+// 离开房间通知其他人
+message LeaveCustomRoomACK {
+    required string playerID = 1;
+}
+
+// 查找房间
+message FindRoomREQ{
+    optional int32 id = 1; //id
+    optional string name = 2; //房间名字
+}
+
+//查找房间的错误码
+//const (
+//  EFRNone                  = iota
+//  EFRGenerateRoomInfoError //产生roomInfo信息错误
+//  EFRRequireParamError     //请求参数错误
+//  EFRNotFind               //没有找到指定的房间
+// )
+
+message FindRoomACK{
+    optional RoomInfo room = 1; //房间信息
+    required int32 code = 2; //错误码 0:没有错误, 1
+}
+
+// 请求踢人
+message ForceLeaveRoomREQ{
+    required string id = 1; //玩家id
+    required int32 sysType = 2; // 对战房间类型（匹配 = 1，自建，比赛场）
+    required int32 gameType  = 3; // 1.大二，2.麻将，3.德州扑克
+}
+
+// 批量邀请好友加入自建房
+message InviteFirendsJionCustomRoomREQ{
+    repeated string playerID = 1; // 批量邀请的玩家ID
+    optional int32 currencyType  = 2; //货币类型
+}
+
+//currencyType
+//const (
+//    CTCredits = 1 //游戏积分
+//    CTCoin    = 2 //游戏金币
+//)
+message InviteFirendsJionCustomRoomNotify{
+    optional int32 code = 1; // 错误码, 0 = 成功 1 = 房间已满 2 = 房间结算 3 = 金币不够
+    // 1 = 匹配房间大贰 2 = 匹配房间麻将 3 = 匹配房间德州
+    // 4 = 自建房间大贰 5 = 自建房间麻将 6 = 自建房间德州
+    // 7 = 比赛房间大贰 8 = 比赛房间麻将 9 = 比赛房间德州
+    optional string gameType         = 2; //游戏类型
+    optional int32 roomID            = 3; //自建房ID
+    optional string invitePlayerName = 4; //邀请者的名字
+    optional int32 currencyType      = 5; //货币类型
+}
+
+// 其他玩家信息
+message OtherPlayerInfo{
+    required int32 userID            = 1; // 玩家数字id
+    required int32 userName          = 2; // 玩家名字
+    optional int32 userHeadID        = 3; // 玩家头像id
+    optional int32 userwechatHeadURL = 4; // 玩家微信头像url
+    optional int32 winNum            = 5; // 胜利场数
+    optional int32 loseNum           = 6; // 失败场数
+    optional int32 lv                = 7; // 等级
+    optional int32 coin              = 8; // 当前携带金币
+}
+
+// 请求查看其他玩家信息
+message OtherPlayerInfoREQ{
+    required string playerID = 1;
+}
+
+
+//比赛相关
+//请求比赛列表
+message MatchListREQ{
+
+}
+
+//比赛列表的回复
+message MatchListACK{
+    repeated Match matches = 1; //比赛列表
+}
+
+message Match{
+    required int32 id = 1; //比赛ID
+    required int32 enrollAmount = 2; //登记报名的数量
+    optional int64 countdown = 3; //入场后的倒计时，没有到入场时间是不会下发此字段的（客服端获取本地时间自己算） 
+}
+
+//请求报名
+message EnrollREQ{
+    required int32 id = 1; //比赛的ID
+}
+
+//报名回复
+message EnrollACK{
+    required int32 result = 1; //0：成功， 报名结果1：不存在的ID，2：没有足够的钱, 3:已经报名了
+}
+
+//请求退赛
+message WithdrawREQ{
+    required int32 id = 1; //比赛的ID
+}
+
+//退赛回复
+message WithdrawACK{
+    required int32 result = 1; //0：成功， 报名结果1：不存在的ID，2：没有报名此比赛
+}
+
+//人数改变通知
+message AmountChangeNotifyACK{
+    repeated Match matches = 1; //比赛人数改变
+}
+
+//开始入场了
+message StartEntranceACK{
+    required Match match = 1; //开始入场的比赛
+}
+
+
+//-----------------------德州扑克---------------------
+
+//预充值信息
+message OrderInfoNofity {
+    optional string partnerId = 1;
+    optional string prepayId = 2;
+    optional string package = 3;
+    optional string nonceStr = 4;
+    optional int32  timeStamp = 5;
+    optional string sign = 6;
+    optional string appId = 7;
+}
+
+//支付结果
+message PayResultNotify {
+    optional string partnerId = 1;
+    optional bool result = 2;   //0--成功，1--失败
+    optional string error_desc = 3;
+    optional int32 vipDay = 4;//vip天数
+}
+
+// 快速进入房间
+message PokerQuickEnterRoomREQ {
+
+}
+
+//请求创建房间
+message CreatePockerRoomReq {
+    optional string uid = 1;
+    optional int32 BlindId = 2; //大小盲注id
+    optional int32 LimId = 3; //进入金币上限Id
+}
+
+//创建房间结果
+message CreatePockerRoomAck {
+    optional int32 roomNo = 1; //房间号
+}
+
+
+message C2SAction {
+    optional int32 act = 1; //1.离开, 2.起身, 3.换桌，4.弃牌， 5.看牌， 6.跟注，7.加注，8.allin, 9.坐下，10.打赏
+    optional string uid = 2;
+    optional int32 raise = 3; //注数量
+    optional PlayerBaseInfo base = 4; //服务器only
+}
+
+message S2CAction {
+    optional string operater = 1; //操作者
+    optional int32 act = 2; //30.定庄, 31.发牌， 32.开始倒计时, 33.翻牌，34.比牌，35.新玩家加入, 36.兑换筹码
+    optional int32 raise = 3; //加注数量
+    repeated Pocker pockers = 4;
+    optional int32 combineNum = 5;//牌型
+    optional int32 countdownEnd =6;//倒计时结束时间
+    repeated int32 pots = 7;//若有玩家allin，pots[0]为主池 
+    repeated string winners = 8;//赢得彩池的玩家
+    repeated PockerManBase infos = 9; //玩家信息
+    optional PockerBegin beginInfo = 10; //游戏开始
+    repeated ComparePokerPlayer comparePlayers = 11;    //参与比牌的玩家
+}
+
+message ComparePokerPlayer
+{
+    required string uid = 1;
+    repeated Pocker pockers = 2;    //玩家手上的牌
+    repeated Pocker combinePockers = 3;//玩家最大牌型组合的牌
+    optional int32 combineNum = 4;//牌型
+}
+
+message PockerBegin{
+    optional string dealerUid = 1; //庄家Uid
+    optional string smBlindUid = 2; //小盲
+    optional string bigBlindUid = 3; //大盲
+    repeated string attendUids = 4; //参与本场比赛的玩家
+
+}
+
+message S2CPockerManInfo {
+    optional string headerUrl = 1;
+    optional string name = 2;
+    optional int32 sex = 3; //0:男，1:女
+    optional int32 coin = 4; //金币
+    optional int32 gem = 5; //宝石   
+    optional int32 roleId = 6; //角色id
+    optional int32 bestPocker = 7; //最大牌型
+    optional int32 lv = 8; //等级
+}
+
+message PockerManBase {
+    optional string uid = 1;
+    optional string headerUrl = 2;
+    optional int32 coin = 3; //手上剩余筹码
+    optional int32 drops = 4;//最近1次跟注
+    optional int32 status = 5;//当前状态(0.就绪,1.站起, 2.加入等入，3.弃牌, 4.思考中, 5.跟注，6.加注，7.allin, 8.看牌)
+    repeated Pocker pockers = 6;//自己手上的牌
+    optional int32 deskIdx = 7; //桌位号(从1开始编号)
+    optional string nickName = 8; //昵称
+    optional int32  endTime = 9; //思考结束时间
+    optional int32 sex = 10; 
+}
+
+message Pocker {
+    required int32 eType = 1; //花色 0.红桃，1.黑桃，2.梅花，3.方块
+    required int32 num = 2; //数字2~14
+}
+
+message PockerRoomBase{
+    repeated Pocker pockers = 1;//桌上已经翻出的公共牌
+    repeated int32 pots = 2;//若有玩家allin，pots[0]为主池 
+    optional string dealerUid = 3;//庄家Uid
+    optional int32 roomId = 4; //房间id
+    optional int32 smallBlind = 5; //小盲注金币
+    optional int32 bigBlind = 6;  //大盲注金币
+    optional int32 roomNo = 7;//自建房号
+}
+
+//进入房间时，同步公共信息
+message PockerRoomInfo {
+    repeated PockerManBase players = 1;
+    optional PockerRoomBase roombase = 2;
+    optional int32 code = 3; //错误码 0:无，1：金币太少，2：达到了房间的金币上限，6:房间满了,
+}
+
+//离开扑克房间(仅用于服务器处理断线重连)
+message LeavePockerRoom {
+    optional string uid = 1;
+}

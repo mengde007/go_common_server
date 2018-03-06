@@ -1,0 +1,14 @@
+{   
+    "comment2"   : "room的内网ip地址:8893",
+    "Host" : "127.0.0.1:8893",
+    "DebugHost" : "127.0.0.1:8993",
+    "GcTime" : 120,
+    "CpuProfile" : false,
+    
+    "Maincache": {
+        "host": "127.0.0.1",
+        "port": 6379,
+        "index": 0,
+        "pool": 100
+    }
+}
